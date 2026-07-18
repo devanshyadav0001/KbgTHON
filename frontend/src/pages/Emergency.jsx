@@ -1,37 +1,135 @@
 import React from 'react';
 
+const HELPLINES = [
+  { name: "India National Emergency", number: "112", icon: "emergency", description: "All emergencies — police, fire, ambulance", primary: true },
+  { name: "Ambulance (India)", number: "108", icon: "local_hospital", description: "Government ambulance service available in most states" },
+  { name: "Health Helpline (India)", number: "104", icon: "phone_in_talk", description: "Free health advice and information hotline" },
+  { name: "ICMR Helpline", number: "011-26588700", icon: "biotech", description: "Indian Council of Medical Research — AMR queries and reporting" },
+  { name: "WHO India", number: "011-66564800", icon: "public", description: "World Health Organization India Office" },
+  { name: "Poison Information Centre (AIIMS)", number: "1800-116-117", icon: "science", description: "National toll-free poison & drug reaction helpline" }
+];
+
+const DANGER_SIGNS = [
+  { symptom: "Difficulty breathing or swallowing", severity: "critical", detail: "Could indicate anaphylaxis — a life-threatening allergic reaction to antibiotics. Call 112 immediately." },
+  { symptom: "Severe rash, hives, or facial swelling", severity: "critical", detail: "Signs of a severe allergic reaction. Stop the medication and seek emergency care." },
+  { symptom: "Persistent high fever (>103°F / 39.4°C) for 48+ hours", severity: "urgent", detail: "May indicate treatment failure or a resistant infection. Contact your doctor urgently." },
+  { symptom: "Severe or bloody diarrhea", severity: "urgent", detail: "Could indicate C. difficile infection, a dangerous side effect of antibiotics. Seek medical attention immediately." },
+  { symptom: "Confusion, disorientation, or altered consciousness", severity: "critical", detail: "May indicate sepsis or severe drug reaction. Call emergency services." },
+  { symptom: "Yellowing of skin or eyes (jaundice)", severity: "urgent", detail: "Could indicate liver damage from certain antibiotics. Stop medication and see a doctor." },
+  { symptom: "Seizures or uncontrolled shaking", severity: "critical", detail: "A rare but serious side effect of some antibiotics. Call emergency services." },
+  { symptom: "Dark or significantly reduced urine output", severity: "urgent", detail: "Could indicate kidney problems. Drink fluids and contact your doctor." }
+];
+
 export default function Emergency() {
   return (
-    <div className="w-full max-w-[800px] mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-on-surface mb-6 flex items-center gap-3">
-        <span className="material-symbols-outlined text-error text-4xl" style={{fontVariationSettings: "'FILL' 1"}}>emergency</span>
-        Emergency Help
+    <div className="w-full max-w-[900px] mx-auto px-margin-mobile md:px-margin-desktop py-xl animate-fade-in">
+      <h1 className="text-headline-lg font-headline-lg text-on-surface mb-sm flex items-center gap-3">
+        <span className="material-symbols-outlined text-error" style={{fontSize: '40px', fontVariationSettings: "'FILL' 1"}}>emergency</span>
+        Emergency Help & Helplines
       </h1>
+      <p className="text-body-md text-on-surface-variant mb-xl">
+        If you or someone you know is experiencing a medical emergency related to antibiotic use, contact emergency services immediately.
+      </p>
       
-      {/* Disclaimer Section */}
-      <div className="bg-error-container/20 border border-error/50 rounded-lg p-5 mb-8 shadow-sm">
-        <h2 className="text-error font-bold text-xl mb-3 flex items-center gap-2">
-          <span className="material-symbols-outlined" style={{fontVariationSettings: "'FILL' 1"}}>warning</span>
-          Medical Disclaimer
-        </h2>
-        <p className="text-on-surface mb-3">
-          <strong>This platform is NOT a substitute for professional medical care or emergency services.</strong>
-        </p>
-        <p className="text-on-surface text-sm">
-          If you are experiencing a severe allergic reaction, difficulty breathing, high unmanageable fever, or any other life-threatening condition, <strong>seek immediate emergency medical attention</strong> or call your local emergency number. Do not rely on this application for urgent medical decisions.
-        </p>
+      {/* Critical Disclaimer */}
+      <div className="bg-error-container border border-error rounded-xl p-lg mb-xl shadow-sm">
+        <div className="flex items-start gap-md">
+          <span className="material-symbols-outlined text-error shrink-0 mt-0.5" style={{fontVariationSettings: "'FILL' 1"}}>gpp_maybe</span>
+          <div>
+            <h2 className="text-headline-sm font-headline-sm text-on-error-container mb-xs">Medical Disclaimer</h2>
+            <p className="text-body-md text-on-error-container">
+              <strong>This platform is NOT a substitute for professional medical care or emergency services.</strong> If you are experiencing a severe allergic reaction, difficulty breathing, high unmanageable fever, or any other life-threatening condition, <strong>call 112 (India) immediately</strong>. Do not rely on this application for urgent medical decisions.
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="bg-surface-container-low p-6 rounded-2xl shadow-sm border border-outline-variant space-y-4">
-        <h2 className="text-xl font-semibold text-on-surface">When to See a Doctor Immediately</h2>
-        <ul className="list-disc pl-5 text-on-surface-variant space-y-2">
-          <li>Difficulty breathing or swallowing</li>
-          <li>Severe rash or hives (possible allergic reaction to antibiotics)</li>
-          <li>Persistent high fever despite taking prescribed medication</li>
-          <li>Severe diarrhea, especially if bloody (possible C. diff infection)</li>
-          <li>Confusion or altered mental state</li>
+      {/* Helpline Cards */}
+      <section className="mb-xl">
+        <h2 className="text-headline-sm font-headline-sm text-primary mb-md flex items-center gap-xs">
+          <span className="material-symbols-outlined">call</span>
+          Emergency Helplines
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-md">
+          {HELPLINES.map((h, i) => (
+            <a 
+              key={i}
+              href={`tel:${h.number.replace(/[^0-9+]/g, '')}`}
+              className={`flex items-start gap-md p-md rounded-lg border transition-all hover:shadow-md cursor-pointer group ${
+                h.primary 
+                  ? 'bg-error-container/50 border-error hover:bg-error-container' 
+                  : 'bg-surface-container-lowest border-outline-variant hover:border-primary'
+              }`}
+            >
+              <span className={`material-symbols-outlined text-2xl mt-0.5 ${h.primary ? 'text-error' : 'text-primary'} group-hover:scale-110 transition-transform`} style={{fontVariationSettings: "'FILL' 1"}}>{h.icon}</span>
+              <div className="flex-grow">
+                <h3 className="text-label-md font-bold text-on-surface">{h.name}</h3>
+                <p className="text-headline-sm font-headline-sm text-primary">{h.number}</p>
+                <p className="text-body-sm text-on-surface-variant mt-xs">{h.description}</p>
+              </div>
+              <span className="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors mt-2">phone_forwarded</span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      {/* Danger Signs */}
+      <section className="mb-xl">
+        <h2 className="text-headline-sm font-headline-sm text-primary mb-md flex items-center gap-xs">
+          <span className="material-symbols-outlined" style={{fontVariationSettings: "'FILL' 1"}}>warning</span>
+          When to Seek Immediate Medical Help
+        </h2>
+        <div className="space-y-sm">
+          {DANGER_SIGNS.map((d, i) => (
+            <div 
+              key={i} 
+              className={`p-md rounded-lg border flex items-start gap-md ${
+                d.severity === 'critical' 
+                  ? 'bg-error-container/20 border-error/40' 
+                  : 'bg-secondary-container/20 border-secondary/40'
+              }`}
+            >
+              <span className={`material-symbols-outlined shrink-0 mt-0.5 ${d.severity === 'critical' ? 'text-error' : 'text-secondary'}`} style={{fontVariationSettings: "'FILL' 1"}}>
+                {d.severity === 'critical' ? 'emergency' : 'report_problem'}
+              </span>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h4 className="text-label-md font-bold text-on-surface">{d.symptom}</h4>
+                  <span className={`text-[9px] uppercase font-bold px-1.5 py-0.5 rounded ${
+                    d.severity === 'critical' ? 'bg-error text-on-primary' : 'bg-secondary text-on-primary'
+                  }`}>{d.severity}</span>
+                </div>
+                <p className="text-body-sm text-on-surface-variant mt-1">{d.detail}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* What to tell the doctor */}
+      <section className="bg-surface-container-low border border-outline-variant rounded-xl p-lg">
+        <h2 className="text-headline-sm font-headline-sm text-primary mb-md flex items-center gap-xs">
+          <span className="material-symbols-outlined">assignment</span>
+          What to Tell Your Doctor
+        </h2>
+        <p className="text-body-md text-on-surface-variant mb-md">When visiting a doctor about antibiotic-related concerns, be sure to share:</p>
+        <ul className="space-y-sm">
+          {[
+            "The exact name and dosage of the antibiotic you took",
+            "When you started it and how many days you've taken it",
+            "Whether you skipped any doses",
+            "Any side effects you've experienced (rash, diarrhea, nausea)",
+            "Other medications, vitamins, or supplements you are taking",
+            "Any known drug allergies",
+            "Whether you are pregnant or breastfeeding"
+          ].map((item, i) => (
+            <li key={i} className="flex items-start gap-sm text-body-sm text-on-surface-variant">
+              <span className="material-symbols-outlined text-primary text-sm mt-0.5 shrink-0" style={{fontVariationSettings: "'FILL' 1"}}>check_circle</span>
+              {item}
+            </li>
+          ))}
         </ul>
-      </div>
+      </section>
     </div>
   );
 }

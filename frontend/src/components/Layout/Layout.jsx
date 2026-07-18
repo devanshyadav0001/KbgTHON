@@ -23,19 +23,20 @@ export default function Layout({ children }) {
             {/* Links */}
             <div className="hidden md:flex items-center gap-6">
               {[
-                { path: '/', label: 'Home' },
-                { path: '/learn', label: 'Learn' },
-                { path: '/quiz', label: 'Quiz' },
-                { path: '/emergency', label: 'Helpline' }
+                { path: '/', label: 'Home', icon: 'home' },
+                { path: '/learn', label: 'Learn', icon: 'menu_book' },
+                { path: '/quiz', label: 'Quiz', icon: 'quiz' },
+                { path: '/emergency', label: 'Helpline', icon: 'support_agent' }
               ].map(item => (
                 <NavLink 
                   key={item.label}
                   to={item.path} 
                   className={({isActive}) => `
-                    font-medium transition-colors hover:text-primary flex items-center justify-center text-sm
+                    font-medium transition-colors hover:text-primary flex items-center justify-center gap-1.5 text-sm
                     ${isActive && item.path !== '/' ? 'text-primary font-bold' : 'text-on-surface-variant'}
                   `}
                 >
+                  <span className="material-symbols-outlined text-[18px]" style={{fontVariationSettings: "'FILL' 0"}}>{item.icon}</span>
                   {item.label}
                 </NavLink>
               ))}

@@ -17,7 +17,12 @@ app = FastAPI(title="AMR Awareness API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:5173", 
+        "https://kbg-thon.vercel.app", 
+        "https://kbg-thon-tmja.vercel.app",
+        "*" # Added for easier testing across Vercel deployments, remove in strict production
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

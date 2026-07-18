@@ -1,4 +1,4 @@
-const API_BASE = ''  // Uses Vite proxy
+const API_BASE = import.meta.env.VITE_API_URL || ''  // Uses Vite proxy in dev, environment variable in production
 
 export async function submitAssessment(data) {
   const res = await fetch(`${API_BASE}/assess`, {

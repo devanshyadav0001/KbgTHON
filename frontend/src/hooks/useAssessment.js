@@ -35,7 +35,8 @@ export function useAssessment() {
       diagnostic_test: merged.diagnostic_test !== undefined ? merged.diagnostic_test : null,
       kept_leftovers: merged.kept_leftovers !== undefined ? merged.kept_leftovers : null,
       pregnancy: merged.pregnancy !== undefined ? merged.pregnancy : null,
-      chronic_disease: merged.chronic_disease !== undefined ? merged.chronic_disease : null
+      chronic_disease: merged.chronic_disease !== undefined ? merged.chronic_disease : null,
+      recent_test_results: merged.recent_test_results || null
     }
 
     try {
@@ -88,7 +89,8 @@ export function useAssessment() {
         })),
         snippets: snippetsMap,
         gender: payload.gender,
-        medications: payload.medications
+        medications: payload.medications,
+        recent_test_results: payload.recent_test_results
       }
       const explainData = await getExplanation(explainPayload)
       setExplanation(explainData)

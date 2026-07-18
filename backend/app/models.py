@@ -22,6 +22,7 @@ class QuestionnaireInput(BaseModel):
     kept_leftovers: Optional[bool] = None
     pregnancy: Optional[bool] = None
     chronic_disease: Optional[bool] = None
+    recent_test_results: Optional[str] = None
 
 class RiskReason(BaseModel):
     rule_id: str
@@ -43,6 +44,7 @@ class ExplanationRequest(BaseModel):
     snippets: Dict[str, str]
     gender: Optional[str] = None
     medications: List[Medication] = []
+    recent_test_results: Optional[str] = None
 
 class ExplanationResponse(BaseModel):
     explanation: str

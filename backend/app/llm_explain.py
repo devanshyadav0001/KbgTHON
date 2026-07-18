@@ -44,7 +44,8 @@ From the input, you must:
 1) Understand the user's behaviours around antibiotic use.
 2) Explain why their misuse risk score and band make sense.
 3) Provide a SHORT, PERSONALIZED clinical-style summary focused on behaviours,
-   not on diagnosis.
+   not on diagnosis. If recent_test_results are provided, incorporate them carefully 
+   to provide a more tailored analysis (e.g. if culture shows resistance, mention the importance of targeted therapy).
 4) Break down the score into components that can be visualized as charts.
 5) Suggest practical, behaviour-level improvements.
 6) Clearly show that the content is AI-generated but verified against
@@ -318,7 +319,7 @@ async def _call_llm(api_key, system_prompt):
     return None
 
 
-async def generate_explanation(score: float, category: str, reasons: list, snippets: dict, medications: list = None, gender: str = None):
+async def generate_explanation(score: float, category: str, reasons: list, snippets: dict, medications: list = None, gender: str = None, recent_test_results: str = None):
     # Fallback key obfuscated to pass GitHub secret scanning
     fallback_key = "sk-or-v1-" + "de4f687c78f8b45d59f51cf0db66d66aa2e9863481e006452efc994f1ba43914"
     api_key = os.getenv("OPENROUTER_API_KEY", fallback_key)
@@ -340,7 +341,8 @@ async def generate_explanation(score: float, category: str, reasons: list, snipp
         "category": category,
         "reasons": [{"rule_id": r.rule_id, "description": r.description, "weight": r.weight} for r in reasons],
         "medications": meds_list,
-        "gender": gender
+        "gender": gender,
+        "recent_test_results": recent_test_results
     }, indent=2)
 
     prompt_with_data = SYSTEM_PROMPT.replace("{USER_ANSWERS_JSON}", payload_json)

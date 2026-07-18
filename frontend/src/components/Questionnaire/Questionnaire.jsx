@@ -2,16 +2,16 @@ import React, { useState, useMemo } from 'react';
 
 const SYMPTOMS = ["Fever", "Cough", "Cold", "Sore throat", "Runny nose", "Body ache", "Dengue-like fever", "High persistent fever", "Confusion", "Breathlessness", "Severe abdominal pain", "Urinary pain", "Skin infection", "Pneumonia (bacterial)", "Urinary Tract Infection (UTI)", "Infected wounds", "Some ear infections", "Some sinus infections", "Dental abscesses", "Bacterial meningitis", "Bone infections (osteomyelitis)", "Other"];
 const ANTIBIOTICS = [
-  "Amoxicillin (e.g. Mox, Augmentin)", 
-  "Azithromycin (e.g. Azee, Zithromax)", 
-  "Ciprofloxacin (e.g. Cifran)", 
-  "Metronidazole (e.g. Flagyl)", 
-  "Doxycycline / Tetracycline", 
-  "Cephalosporin (e.g. Taxim, Ceftum)", 
-  "Erythromycin",
-  "Levofloxacin",
-  "Paracetamol / Dolo / Calpol (Painkiller)",
-  "Ibuprofen / Combiflam (Painkiller)",
+  "Amoxicillin (e.g. Mox, Augmentin) — [Ear/throat/sinus infections, UTI]", 
+  "Azithromycin (e.g. Azee, Zithromax) — [Respiratory, skin, ear infections]", 
+  "Ciprofloxacin (e.g. Cifran) — [UTI, GI infections, bone/joint infections]", 
+  "Metronidazole (e.g. Flagyl) — [Dental, GI, anaerobic infections]", 
+  "Doxycycline / Tetracycline — [Acne, malaria prevention, respiratory]", 
+  "Cephalosporin (e.g. Taxim, Ceftum) — [Serious bacterial infections, surgical prophylaxis]", 
+  "Erythromycin — [Chest, skin infections, STIs]",
+  "Levofloxacin — [Pneumonia, chronic bronchitis, sinusitis]",
+  "Paracetamol / Dolo / Calpol (Painkiller) — [Fever, headache, body pain – NOT an antibiotic]",
+  "Ibuprofen / Combiflam (Painkiller) — [Pain, inflammation, fever – NOT an antibiotic]",
   "Other (Type custom medication)",
   "Don't know"
 ];
@@ -86,6 +86,7 @@ export default function Questionnaire({ onSubmit, loading }) {
     kept_leftovers: null,
     pregnancy: null,
     chronic_disease: null,
+    recent_test_results: '',
   });
 
   const update = (fields) => setData(prev => ({ ...prev, ...fields }));
@@ -149,6 +150,7 @@ export default function Questionnaire({ onSubmit, loading }) {
       chronic_disease: data.chronic_disease === true,
       diagnostic_test: data.diagnostic_test === true,
       kept_leftovers: data.kept_leftovers === true,
+      recent_test_results: data.recent_test_results || '',
     });
   };
 
@@ -457,6 +459,19 @@ export default function Questionnaire({ onSubmit, loading }) {
                         value={data.diagnostic_test}
                         onChange={(v) => update({ diagnostic_test: v })}
                       />
+
+                      {data.diagnostic_test === true && (
+                        <div className="mt-md animate-fade-in">
+                          <label className="block text-label-md font-label-md text-on-surface mb-xs">Share your test results (optional but highly recommended)</label>
+                          <p className="text-body-sm font-body-sm text-on-surface-variant mb-sm">Sharing your recent test results (e.g., CBC, CRP, blood culture, urine culture) helps our AI provide a much more accurate and personalized risk analysis.</p>
+                          <textarea
+                            value={data.recent_test_results}
+                            onChange={(e) => update({ recent_test_results: e.target.value })}
+                            className="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-body-sm font-body-sm min-h-[100px] resize-y"
+                            placeholder="e.g., CBC: WBC 12,000/μL (high), CRP: 48 mg/L (elevated), Urine culture: E. coli detected…"
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}

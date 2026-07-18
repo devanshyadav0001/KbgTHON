@@ -79,7 +79,7 @@ export default function Results() {
   const isHigh = assessData.category === "High";
 
   return (
-    <div className="flex-grow w-full max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop py-xl md:py-3xl flex flex-col gap-lg animate-fade-in">
+    <div className="flex-grow w-full mx-auto py-xl md:py-3xl flex flex-col gap-lg animate-fade-in">
       <header className="flex flex-col gap-md mb-md">
         <div>
           <h1 className="text-headline-lg-mobile md:text-headline-lg font-headline-lg-mobile md:font-headline-lg text-primary">Assessment Results</h1>
@@ -114,19 +114,19 @@ export default function Results() {
         ) : (
           <>
             {/* Top Row: Gauge & Analysis side-by-side */}
-            <div className="lg:col-span-4 flex flex-col gap-gutter">
+            <div className="lg:col-span-5 flex flex-col gap-gutter">
               <RiskResult data={assessData} variant="gaugeOnly" />
             </div>
-            <div className="lg:col-span-8 flex flex-col gap-gutter">
+            <div className="lg:col-span-7 flex flex-col gap-gutter">
               <Explanation explanation={explainData} loading={!explainData && loadingExplain} riskScore={assessData.score} />
             </div>
 
             {/* Bottom Row: Risk Factors List & Chart side-by-side */}
-            <div className="lg:col-span-7 flex flex-col gap-gutter">
+            <div className="lg:col-span-6 flex flex-col gap-gutter">
               <RiskResult data={assessData} variant="factorsOnly" />
             </div>
-            <div className="lg:col-span-5 flex flex-col gap-gutter">
-              <div className="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm p-lg h-full">
+            <div className="lg:col-span-6 flex flex-col gap-gutter">
+              <div className="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm p-lg h-full flex flex-col">
                 <RiskChart currentScore={assessData.score} />
               </div>
             </div>

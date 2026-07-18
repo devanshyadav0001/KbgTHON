@@ -34,7 +34,7 @@ export default function Chatbot() {
       {/* Floating Button */}
       <button
         onClick={() => setOpen(!open)}
-        className={`fixed bottom-6 right-6 z-50 h-16 w-16 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-105 active:scale-95 ${
+        className={`fixed bottom-10 right-6 md:bottom-12 md:right-12 z-50 h-16 w-16 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-105 active:scale-95 ${
           open ? "bg-surface-container-high text-on-surface" : "bg-primary text-on-primary hover:shadow-xl"
         }`}
         aria-label="Toggle AI Assistant"

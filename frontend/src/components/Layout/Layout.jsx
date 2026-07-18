@@ -13,8 +13,9 @@ export default function Layout({ children }) {
             
             {/* Logo / Brand */}
             <NavLink to="/" className="group flex items-center gap-2 bg-primary/10 rounded-full pr-4 pl-1 py-1 cursor-pointer hover:bg-primary/20 transition-colors" title="Go to Home">
-              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-sm group-hover:rotate-[180deg] transition-transform duration-700 ease-in-out">
-                <span className="material-symbols-outlined text-on-primary text-lg select-none" style={{fontVariationSettings: "'FILL' 0"}}>public</span>
+              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-sm relative overflow-hidden">
+                <span className="material-symbols-outlined text-on-primary text-lg select-none animate-spin-slow group-hover:scale-110 transition-transform duration-300" style={{fontVariationSettings: "'FILL' 0", animationDuration: '8s'}}>public</span>
+                <div className="absolute inset-0 bg-primary/30 animate-ping rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </div>
               <span className="text-sm font-bold text-primary tracking-tight">AMR Guard</span>
             </NavLink>
@@ -53,7 +54,7 @@ export default function Layout({ children }) {
           <div className="h-24 w-full"></div>
 
           {/* Global Warning Banner */}
-          <div className="w-full max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop mb-4">
+          <div className="w-full px-4 md:px-8 xl:px-12 mx-auto mb-4">
             <div className="bg-error-container/20 border border-error/50 rounded-lg p-3 flex items-start sm:items-center gap-3 shadow-sm">
               <span className="material-symbols-outlined text-error text-xl mt-0.5 sm:mt-0" style={{fontVariationSettings: "'FILL' 1"}}>warning</span>
               <p className="font-body-sm text-sm text-on-surface">
@@ -64,7 +65,7 @@ export default function Layout({ children }) {
         </>
       )}
 
-      <main className={`flex-grow w-full ${!isLanding ? 'max-w-[1440px] mx-auto' : ''}`}>
+      <main className={`flex-grow w-full ${!isLanding ? 'px-4 md:px-8 xl:px-12 mx-auto' : ''}`}>
         {children}
       </main>
       {!isLanding && (

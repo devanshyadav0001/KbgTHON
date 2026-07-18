@@ -10,6 +10,7 @@ export default defineConfig({
       '^/guideline/.*': 'http://localhost:8000',
       '^/explain$': 'http://localhost:8000',
       '^/health$': 'http://localhost:8000',
+      '^/chat$': 'http://localhost:8000',
     }
   }
 })

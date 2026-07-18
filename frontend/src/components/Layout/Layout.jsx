@@ -8,16 +8,19 @@ export default function Layout({ children }) {
   return (
     <>
       {/* Floating Pill Navbar Wrapper */}
-      <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-margin-mobile pointer-events-none">
-        <nav className="pointer-events-auto bg-surface text-on-surface rounded-full flex items-center justify-between px-1.5 py-1.5 shadow-md border border-outline/20 w-auto gap-4">
+      <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-margin-mobile pointer-events-none">
+        <nav className="pointer-events-auto bg-surface/90 backdrop-blur-md text-on-surface rounded-full flex items-center justify-between px-2 py-2 shadow-sm border border-outline-variant/30 w-auto gap-8 transition-all hover:shadow-md">
             
-            {/* Logo */}
-            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0 ml-1">
-              <span className="material-symbols-outlined text-on-primary text-lg select-none" style={{fontVariationSettings: "'FILL' 0"}}>public</span>
-            </div>
+            {/* Logo / Brand */}
+            <NavLink to="/" className="group flex items-center gap-2 bg-primary/10 rounded-full pr-4 pl-1 py-1 cursor-pointer hover:bg-primary/20 transition-colors" title="Go to Home">
+              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-sm group-hover:rotate-[180deg] transition-transform duration-700 ease-in-out">
+                <span className="material-symbols-outlined text-on-primary text-lg select-none" style={{fontVariationSettings: "'FILL' 0"}}>public</span>
+              </div>
+              <span className="text-sm font-bold text-primary tracking-tight">AMR Guard</span>
+            </NavLink>
             
             {/* Links */}
-            <div className="hidden md:flex items-center gap-6 px-4">
+            <div className="hidden md:flex items-center gap-6">
               {[
                 { path: '/', label: 'Home' },
                 { path: '/learn', label: 'Learn' },
@@ -28,8 +31,7 @@ export default function Layout({ children }) {
                   key={item.label}
                   to={item.path} 
                   className={({isActive}) => `
-                    font-medium transition-all hover:text-primary flex items-center justify-center
-                    ${item.label === 'Learn' ? 'text-xs px-2.5 py-1 bg-primary/10 text-primary rounded-full border border-transparent shadow-sm hover:bg-primary/20' : 'text-xs'}
+                    font-medium transition-colors hover:text-primary flex items-center justify-center text-sm
                     ${isActive && item.path !== '/' ? 'text-primary font-bold' : 'text-on-surface-variant'}
                   `}
                 >
@@ -39,7 +41,7 @@ export default function Layout({ children }) {
             </div>
 
             {/* Action Button */}
-            <NavLink to="/assessment" className="bg-primary text-on-primary px-5 py-1.5 rounded-full font-medium text-xs hover:bg-primary/90 transition-colors shadow-sm cursor-pointer shrink-0 mr-1">
+            <NavLink to="/assessment" className="bg-primary text-on-primary px-6 py-2 rounded-full font-bold text-sm hover:bg-primary/90 transition-all shadow-sm hover:shadow cursor-pointer shrink-0 ml-2">
               Start Check
             </NavLink>
           </nav>

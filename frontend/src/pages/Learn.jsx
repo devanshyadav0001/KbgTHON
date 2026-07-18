@@ -155,6 +155,67 @@ export default function Learn() {
         </div>
       </section>
 
+      {/* Key Things to Know - Added from User Request */}
+      <section className="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm">
+        <div className="flex items-center gap-sm mb-md border-b border-outline-variant pb-sm">
+          <span className="material-symbols-outlined text-primary" style={{fontVariationSettings: "'FILL' 1"}}>info</span>
+          <h2 className="font-headline-sm text-headline-sm text-primary">Key Things to Know About Antibiotics</h2>
+        </div>
+        
+        <p className="font-body-md text-body-md text-on-surface mb-md">
+          Antibiotics only treat bacterial infections and are completely ineffective against viruses like the common cold or flu. Always complete the full prescribed course to ensure all bacteria are eliminated, take doses at the same time daily, and consult your healthcare provider about whether to take them with food. <span className="text-xs text-on-surface-variant align-super">[1, 2]</span>
+        </p>
+
+        <ul className="flex flex-col gap-sm mb-lg">
+          <li className="flex items-start gap-sm p-sm rounded bg-surface border border-outline-variant/50">
+            <span className="material-symbols-outlined text-error mt-0.5" style={{fontVariationSettings: "'FILL' 1"}}>block</span>
+            <div>
+              <strong className="font-label-md text-on-surface">Do Not Share or Reuse:</strong>
+              <p className="font-body-sm text-on-surface-variant mt-1">Never take antibiotics prescribed for someone else, and do not save leftovers for a later illness. Using the wrong medication delays proper treatment and contributes to antibiotic resistance.</p>
+            </div>
+          </li>
+          <li className="flex items-start gap-sm p-sm rounded bg-surface border border-outline-variant/50">
+            <span className="material-symbols-outlined text-secondary mt-0.5" style={{fontVariationSettings: "'FILL' 1"}}>sick</span>
+            <div>
+              <strong className="font-label-md text-on-surface">Potential Side Effects:</strong>
+              <p className="font-body-sm text-on-surface-variant mt-1">Common side effects include nausea, diarrhea, and loss of appetite. Taking the medication with food can often help lessen stomach upset.</p>
+            </div>
+          </li>
+          <li className="flex items-start gap-sm p-sm rounded bg-surface border border-outline-variant/50">
+            <span className="material-symbols-outlined text-warning mt-0.5" style={{fontVariationSettings: "'FILL' 1"}}>warning</span>
+            <div>
+              <strong className="font-label-md text-on-surface">Interactions with Other Drugs:</strong>
+              <p className="font-body-sm text-on-surface-variant mt-1">Some antibiotics can make birth control pills less effective. Additionally, it is generally recommended to avoid alcohol while taking antibiotics, as it can cause adverse reactions.</p>
+            </div>
+          </li>
+          <li className="flex items-start gap-sm p-sm rounded bg-surface border border-outline-variant/50">
+            <span className="material-symbols-outlined text-tertiary mt-0.5" style={{fontVariationSettings: "'FILL' 1"}}>woman</span>
+            <div>
+              <strong className="font-label-md text-on-surface">Birth Control & Yeast Infections:</strong>
+              <p className="font-body-sm text-on-surface-variant mt-1">Women may be at a higher risk of developing a vaginal yeast infection while on antibiotics.</p>
+            </div>
+          </li>
+          <li className="flex items-start gap-sm p-sm rounded bg-error-container/30 border border-error/30">
+            <span className="material-symbols-outlined text-error mt-0.5" style={{fontVariationSettings: "'FILL' 1"}}>emergency</span>
+            <div>
+              <strong className="font-label-md text-on-surface">Allergic Reactions:</strong>
+              <p className="font-body-sm text-on-surface-variant mt-1">Seek immediate medical attention if you experience severe symptoms of an allergic reaction, such as a rash, hives, difficulty breathing, or severe swelling. <span className="text-xs text-on-surface-variant align-super">[6, 7, 8, 9, 10]</span></p>
+            </div>
+          </li>
+        </ul>
+
+        <div className="bg-primary-container/30 p-md rounded-lg border border-primary/20">
+          <p className="font-body-sm text-on-surface mb-2">If you are currently experiencing symptoms or have been prescribed an antibiotic, our tool can help you understand:</p>
+          <ul className="list-disc pl-5 font-body-sm text-on-surface-variant mb-3 space-y-1">
+            <li>Common side effects associated with your specific medication</li>
+            <li>Important food or drug interactions to avoid</li>
+            <li>General tips on how to manage stomach discomfort</li>
+          </ul>
+          <p className="font-body-sm text-on-surface mb-2">Take the assessment to let us know which antibiotic you were prescribed or what symptoms you are dealing with.</p>
+          <p className="font-label-sm text-on-surface-variant italic mt-3 pt-2 border-t border-outline-variant/50">AI can make mistakes, so always double-check responses with a healthcare provider.</p>
+        </div>
+      </section>
+
       {/* Accordions for detailed sections */}
       <section>
         <h2 className="font-headline-lg text-headline-lg text-primary mb-lg border-b border-outline-variant pb-sm">Guidelines & Toolkit</h2>

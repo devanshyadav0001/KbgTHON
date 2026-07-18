@@ -66,28 +66,43 @@ export default function Layout({ children }) {
         {children}
       </main>
       {!isLanding && (
-        <footer className="bg-surface-container-low border-t border-outline-variant mt-auto">
-          <div className="w-full py-xl px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter max-w-[1440px] mx-auto">
-            <div className="flex flex-col gap-sm col-span-1 md:col-span-2 lg:col-span-1">
-              <span className="text-label-md font-label-md font-bold text-primary mb-md block">AMR Clinical Portal</span>
-              <p className="text-body-sm font-body-sm text-on-surface-variant">© 2024 AMR Awareness Initiative. Professional Clinical Resource.</p>
+        <footer className="border-t border-outline-variant bg-[#182420] text-[#eff1e7] mt-auto">
+          <div className="mx-auto max-w-[1440px] px-margin-mobile md:px-margin-desktop py-12">
+            <p className="mb-6 text-[11px] uppercase tracking-[0.14em] text-[#eff1e7]/50 font-mono">
+              Package insert - Read before use
+            </p>
+            <div className="grid gap-8 sm:grid-cols-3">
+              <div>
+                <h3 className="text-[11px] uppercase tracking-[0.14em] text-[#eff1e7]/70 font-mono">
+                  What this is
+                </h3>
+                <p className="mt-2 text-[13px] leading-relaxed text-[#eff1e7]/80">
+                  An educational, rule-based self-check that explains general antibiotic-misuse risk patterns, grounded in public WHO, ICMR, and CDC guidance.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-[11px] uppercase tracking-[0.14em] text-[#eff1e7]/70 font-mono">
+                  What this is not
+                </h3>
+                <p className="mt-2 text-[13px] leading-relaxed text-[#eff1e7]/80">
+                  Not a diagnosis, not a prescription, and not a substitute for a clinician who can actually examine you. It cannot tell you which drug, if any, you need.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-[11px] uppercase tracking-[0.14em] text-[#eff1e7]/70 font-mono">
+                  When to see a doctor
+                </h3>
+                <p className="mt-2 text-[13px] leading-relaxed text-[#eff1e7]/80">
+                  Immediately, if you have a fever that won't break, worsening symptoms, or you're unsure whether you need antibiotics at all - regardless of what this tool says.
+                </p>
+              </div>
             </div>
-            
-            <div className="flex flex-col gap-sm">
-              <a className="text-body-sm font-body-sm text-on-surface-variant hover:text-secondary transition-opacity duration-200" href="/learn">Medical Disclaimer</a>
-            <a className="text-body-sm font-body-sm text-on-surface-variant hover:text-secondary transition-opacity duration-200" href="/learn">Privacy Policy</a>
+            <div className="mt-10 flex flex-col gap-2 border-t border-[#eff1e7]/15 pt-6 text-[11px] text-[#eff1e7]/40 sm:flex-row sm:items-center sm:justify-between">
+              <span>Rx-AMR - A hackathon prototype for public-health AI awareness</span>
+              <span>Not affiliated with WHO, ICMR, or CDC</span>
+            </div>
           </div>
-          
-          <div className="flex flex-col gap-sm">
-            <a className="text-body-sm font-body-sm text-on-surface-variant hover:text-secondary transition-opacity duration-200" href="/learn">Terms of Service</a>
-            <a className="text-body-sm font-body-sm text-on-surface-variant hover:text-secondary transition-opacity duration-200" href="/learn">Contact Support</a>
-          </div>
-          
-          <div className="flex flex-col gap-sm">
-            <a className="text-body-sm font-body-sm text-on-surface-variant hover:text-secondary transition-opacity duration-200" href="/learn">WHO Guidelines</a>
-          </div>
-        </div>
-      </footer>
+        </footer>
       )}
     </>
   );

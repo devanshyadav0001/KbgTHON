@@ -1,15 +1,8 @@
-import os
-from google import genai
-from dotenv import load_dotenv
+from sentence_transformers import SentenceTransformer
 
-load_dotenv()
+# Load embedding model only once
+embedding_model = SentenceTransformer("BAAI/bge-small-en-v1.5")
 
-# Load the client
-client = genai.Client()
 
 def get_embedding(text: str):
-    response = client.models.embed_content(
-        model='gemini-embedding-2',
-        contents=text
-    )
-    return response.embeddings[0].values
+    return embedding_model.encode(text).tolist()

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 
-const SYMPTOMS = ["Fever", "Cough", "Cold", "Sore throat", "Runny nose", "Body ache", "Dengue-like fever", "High persistent fever", "Confusion", "Breathlessness", "Severe abdominal pain", "Urinary pain", "Skin infection", "Other"];
+const SYMPTOMS = ["Fever", "Cough", "Cold", "Sore throat", "Runny nose", "Body ache", "Dengue-like fever", "High persistent fever", "Confusion", "Breathlessness", "Severe abdominal pain", "Urinary pain", "Skin infection", "Pneumonia (bacterial)", "Urinary Tract Infection (UTI)", "Infected wounds", "Some ear infections", "Some sinus infections", "Dental abscesses", "Bacterial meningitis", "Bone infections (osteomyelitis)", "Other"];
 const ANTIBIOTICS = [
   "Amoxicillin (e.g. Mox, Augmentin)", 
   "Azithromycin (e.g. Azee, Zithromax)", 
@@ -8,9 +8,12 @@ const ANTIBIOTICS = [
   "Metronidazole (e.g. Flagyl)", 
   "Doxycycline / Tetracycline", 
   "Cephalosporin (e.g. Taxim, Ceftum)", 
+  "Erythromycin",
+  "Levofloxacin",
   "Paracetamol / Dolo / Calpol (Painkiller)",
   "Ibuprofen / Combiflam (Painkiller)",
-  "Other / Don't know"
+  "Other (Type custom medication)",
+  "Don't know"
 ];
 
 const SOURCES = [
@@ -68,6 +71,7 @@ export default function Questionnaire({ onSubmit, loading }) {
     symptoms: [],
     suggestion_source: '',
     antibiotic_prescribed: '',
+    custom_medication: '',
     dosage: '',
     days_prescribed: '',
     days_completed: '',
@@ -119,6 +123,7 @@ export default function Questionnaire({ onSubmit, loading }) {
   const handleSubmit = () => {
     onSubmit({
       ...data,
+      antibiotic_prescribed: data.antibiotic_prescribed === "Other (Type custom medication)" ? data.custom_medication : data.antibiotic_prescribed,
       age: parseInt(data.age, 10),
       doctor_consulted: data.suggestion_source === 'Doctor',
       doses_skipped: data.doses_skipped === true,
@@ -132,7 +137,12 @@ export default function Questionnaire({ onSubmit, loading }) {
   const canProceed = () => {
     switch (currentStep.id) {
       case 'symptoms': return data.age > 0 && data.symptoms.length > 0;
-      case 'source': return data.suggestion_source !== '' && (data.antibiotic_prescribed === '' || data.dosage !== '');
+      case 'source': 
+        if (data.suggestion_source === '') return false;
+        if (data.antibiotic_prescribed === '') return true;
+        if (data.antibiotic_prescribed === 'Other (Type custom medication)' && data.custom_medication === '') return false;
+        if (data.dosage === '') return false;
+        return true;
       case 'course': return true;
       case 'doses': return data.doses_skipped !== null;
       case 'history': return data.prior_use_6mo !== null && data.shared_antibiotics !== null;
@@ -281,6 +291,18 @@ export default function Questionnaire({ onSubmit, loading }) {
                         {ANTIBIOTICS.map(a => <option key={a} value={a}>{a}</option>)}
                       </select>
                     </div>
+                    {data.antibiotic_prescribed === 'Other (Type custom medication)' && (
+                      <div className="animate-fade-in">
+                        <label className="block text-label-md font-label-md text-on-surface mb-xs">Custom Medication Name</label>
+                        <input 
+                          type="text"
+                          value={data.custom_medication}
+                          onChange={e => update({ custom_medication: e.target.value })}
+                          className="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-body-md font-body-md"
+                          placeholder="Enter medication name"
+                        />
+                      </div>
+                    )}
                     {data.antibiotic_prescribed !== '' && (
                       <div className="animate-fade-in">
                         <label className="block text-label-md font-label-md text-on-surface mb-xs">Dosage (e.g., 500mg, 650mg)</label>

@@ -47,9 +47,9 @@ def evaluate(input_data: QuestionnaireInput) -> RiskResult:
         elif rule['id'] == 'RULE-08':
             triggered = input_data.suggestion_source == 'Pharmacist'
         elif rule['id'] == 'RULE-09':
-            triggered = input_data.antibiotic_prescribed and "Painkiller" in input_data.antibiotic_prescribed
+            triggered = any("Painkiller" in med.name for med in input_data.medications)
         elif rule['id'] == 'RULE-10':
-            triggered = input_data.age < 15 and is_high_dose(input_data.dosage)
+            triggered = input_data.age < 15 and any(is_high_dose(med.dosage) for med in input_data.medications)
         elif rule['id'] == 'RULE-11':
             triggered = input_data.diagnostic_test == False and input_data.suggestion_source != 'Doctor'
         elif rule['id'] == 'RULE-12':

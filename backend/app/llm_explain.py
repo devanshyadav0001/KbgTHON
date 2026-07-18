@@ -148,7 +148,7 @@ RULE_SUMMARIES = {
     "RULE-16": {"label": "Chronic disease", "summary": "Pre-existing conditions like diabetes or asthma compromise your immune system. Inappropriate antibiotic use can lead to severe resistant opportunistic infections.", "tip": "With chronic conditions, always get a targeted antibiotic based on culture results rather than broad-spectrum empirical therapy."}
 }
 
-def _build_smart_fallback(score, category, reasons, drug_name=None, dosage=None, gender=None):
+def _build_smart_fallback(score, category, reasons, medications=None, gender=None):
     """Build a personalized, intelligent fallback when LLM is unavailable."""
     
     # Classify risk band for the response
@@ -176,6 +176,11 @@ def _build_smart_fallback(score, category, reasons, drug_name=None, dosage=None,
     else:
         personalized = " ".join(summaries[:3]) + f" In total, {len(summaries)} risk factors were identified in your usage patterns. We strongly recommend consulting a doctor."
     
+    # Add medication info to summary if available
+    if medications:
+        med_strings = [f"{m.name} ({m.dosage})" for m in medications]
+        personalized += f" Analyzed for: {', '.join(med_strings)}."
+
     # Build score breakdown components
     components = []
     access_pts = sum(r.weight for r in reasons if r.rule_id in ["RULE-01", "RULE-03", "RULE-08"])
@@ -313,24 +318,28 @@ async def _call_llm(api_key, system_prompt):
     return None
 
 
-async def generate_explanation(score: float, category: str, reasons: list, snippets: dict, drug_name: str = None, dosage: str = None, gender: str = None):
+async def generate_explanation(score: float, category: str, reasons: list, snippets: dict, medications: list = None, gender: str = None):
     # Fallback key obfuscated to pass GitHub secret scanning
     fallback_key = "sk-or-v1-" + "de4f687c78f8b45d59f51cf0db66d66aa2e9863481e006452efc994f1ba43914"
     api_key = os.getenv("OPENROUTER_API_KEY", fallback_key)
     
     # Build smart fallback from rule data (always available as backup)
-    smart_fallback = _build_smart_fallback(score, category, reasons, drug_name, dosage, gender)
+    smart_fallback = _build_smart_fallback(score, category, reasons, medications, gender)
     
     if not api_key:
         return ExplanationResponse(explanation=smart_fallback, disclaimer=DISCLAIMER, filtered=True)
+
+    # Format medications for LLM
+    meds_list = []
+    if medications:
+        meds_list = [{"name": m.name, "dosage": m.dosage} for m in medications]
 
     # Format the payload for the prompt
     payload_json = json.dumps({
         "score": score,
         "category": category,
         "reasons": [{"rule_id": r.rule_id, "description": r.description, "weight": r.weight} for r in reasons],
-        "drug_name": drug_name,
-        "dosage": dosage,
+        "medications": meds_list,
         "gender": gender
     }, indent=2)
 

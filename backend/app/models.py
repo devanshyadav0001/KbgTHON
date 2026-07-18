@@ -1,14 +1,17 @@
 from pydantic import BaseModel
 from typing import List, Optional, Dict
 
+class Medication(BaseModel):
+    name: str
+    dosage: str
+
 class QuestionnaireInput(BaseModel):
     age: int
     gender: Optional[str] = None
     symptoms: List[str]
     doctor_consulted: bool
     suggestion_source: Optional[str] = None
-    antibiotic_prescribed: Optional[str] = None
-    dosage: Optional[str] = None
+    medications: List[Medication] = []
     days_prescribed: Optional[int] = None
     days_completed: Optional[int] = None
     doses_skipped: bool
@@ -39,8 +42,7 @@ class ExplanationRequest(BaseModel):
     reasons: List[RiskReason]
     snippets: Dict[str, str]
     gender: Optional[str] = None
-    drug_name: Optional[str] = None
-    dosage: Optional[str] = None
+    medications: List[Medication] = []
 
 class ExplanationResponse(BaseModel):
     explanation: str

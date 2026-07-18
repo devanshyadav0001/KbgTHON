@@ -75,9 +75,7 @@ export default function Questionnaire({ onSubmit, loading }) {
     gender: '',
     symptoms: [],
     suggestion_source: '',
-    antibiotic_prescribed: '',
-    custom_medication: '',
-    dosage: '',
+    medications: [], // Array of { name: '', dosage: '', isCustom: false, customName: '' }
     days_prescribed: '',
     days_completed: '',
     doses_skipped: null,
@@ -131,9 +129,15 @@ export default function Questionnaire({ onSubmit, loading }) {
   };
 
   const handleSubmit = () => {
+    // Process medications to clean up custom names
+    const processedMedications = data.medications.map(m => ({
+      name: m.isCustom ? m.customName : m.name,
+      dosage: m.dosage
+    }));
+
     onSubmit({
       ...data,
-      antibiotic_prescribed: data.antibiotic_prescribed === "Other (Type custom medication)" ? data.custom_medication : data.antibiotic_prescribed,
+      medications: processedMedications,
       age: parseInt(data.age, 10),
       doctor_consulted: data.suggestion_source === 'Doctor',
       doses_skipped: data.doses_skipped === true,
@@ -157,9 +161,15 @@ export default function Questionnaire({ onSubmit, loading }) {
       case 'source': 
         if (data.suggestion_source === '') return false;
         if (data.suggestion_source === 'None') return true;
-        if (data.antibiotic_prescribed === '') return false;
-        if (data.antibiotic_prescribed === 'Other (Type custom medication)' && data.custom_medication === '') return false;
-        if (data.dosage === '') return false;
+        if (data.medications.length === 0) return false;
+        // Check if all added medications are completely filled out
+        const allMedsValid = data.medications.every(m => {
+          if (m.name === '') return false;
+          if (m.isCustom && m.customName === '') return false;
+          if (m.dosage === '') return false;
+          return true;
+        });
+        if (!allMedsValid) return false;
         if (data.diagnostic_test === null) return false;
         return true;
       case 'course': 
@@ -328,7 +338,7 @@ export default function Questionnaire({ onSubmit, loading }) {
                 <h1 className="text-headline-sm md:text-headline-md font-headline-sm md:font-headline-md text-on-surface">Antibiotic Use</h1>
 
                 <div className="mt-2">
-                  <label className="block text-label-md font-label-md text-on-surface mb-sm">Are you currently taking antibiotics for these symptoms?</label>
+                  <label className="block text-label-md font-label-md text-on-surface mb-sm">Are you currently taking medications for these symptoms?</label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-md">
                     {[{id: 'Doctor', label: 'Yes, prescribed by Doctor'}, {id: 'Pharmacist', label: 'Yes, suggested by Pharmacist'}, {id: 'Self/Online', label: 'Yes, self-medicated'}, {id: 'None', label: 'No, just checking symptoms'}].map(src => (
                       <label key={src.id} className="cursor-pointer relative group">
@@ -337,7 +347,7 @@ export default function Questionnaire({ onSubmit, loading }) {
                           name="source" 
                           type="radio" 
                           checked={data.suggestion_source === src.id}
-                          onChange={() => update({ suggestion_source: src.id, antibiotic_prescribed: src.id === 'None' ? '' : data.antibiotic_prescribed })}
+                          onChange={() => update({ suggestion_source: src.id, medications: src.id === 'None' ? [] : data.medications })}
                         />
                         <div className="w-full h-full p-md border border-outline-variant rounded bg-surface-container-lowest flex items-center gap-sm transition-all duration-200 peer-checked:border-primary peer-checked:border-2 peer-checked:bg-surface-container-low hover:border-outline">
                           <span className="text-label-md font-label-md text-on-surface-variant group-hover:text-on-surface peer-checked:text-primary peer-checked:font-bold transition-all">
@@ -351,45 +361,96 @@ export default function Questionnaire({ onSubmit, loading }) {
 
                 {data.suggestion_source !== '' && data.suggestion_source !== 'None' && (
                   <div className="mt-6 animate-fade-in flex flex-col gap-md">
-                    <div>
-                      <label className="block text-label-md font-label-md text-on-surface mb-xs">Drug / Medication Used</label>
-                      <select 
-                        value={data.antibiotic_prescribed}
-                        onChange={e => update({ antibiotic_prescribed: e.target.value })}
-                        className="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-body-md font-body-md"
+                    <div className="flex flex-col gap-md">
+                      <label className="block text-label-md font-label-md text-on-surface mb-xs border-b border-outline-variant pb-2">Medications Used</label>
+                      
+                      {data.medications.map((med, index) => (
+                        <div key={index} className="bg-surface-container-lowest border border-outline-variant rounded p-md relative shadow-sm">
+                          <button 
+                            type="button"
+                            onClick={() => {
+                              const newMeds = [...data.medications];
+                              newMeds.splice(index, 1);
+                              update({ medications: newMeds });
+                            }}
+                            className="absolute top-2 right-2 text-on-surface-variant hover:text-error transition-colors"
+                            title="Remove medication"
+                          >
+                            <span className="material-symbols-outlined">close</span>
+                          </button>
+
+                          <div className="flex flex-col gap-sm">
+                            <div>
+                              <label className="block text-label-sm font-label-sm text-on-surface mb-xs">Drug / Medication</label>
+                              <select 
+                                value={med.name}
+                                onChange={(e) => {
+                                  const val = e.target.value;
+                                  const newMeds = [...data.medications];
+                                  newMeds[index].name = val;
+                                  newMeds[index].isCustom = val === 'Other (Type custom medication)';
+                                  update({ medications: newMeds });
+                                }}
+                                className="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-body-sm font-body-sm"
+                              >
+                                <option value="" disabled>Select an option</option>
+                                {ANTIBIOTICS.map(a => <option key={a} value={a}>{a}</option>)}
+                              </select>
+                            </div>
+
+                            {med.isCustom && (
+                              <div className="animate-fade-in">
+                                <label className="block text-label-sm font-label-sm text-on-surface mb-xs">Custom Medication Name</label>
+                                <input 
+                                  type="text"
+                                  value={med.customName}
+                                  onChange={(e) => {
+                                    const newMeds = [...data.medications];
+                                    newMeds[index].customName = e.target.value;
+                                    update({ medications: newMeds });
+                                  }}
+                                  className="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-body-sm font-body-sm"
+                                  placeholder="Enter medication name"
+                                />
+                              </div>
+                            )}
+
+                            {med.name !== '' && (
+                              <div className="animate-fade-in">
+                                <label className="block text-label-sm font-label-sm text-on-surface mb-xs">Dosage</label>
+                                <select 
+                                  value={med.dosage}
+                                  onChange={(e) => {
+                                    const newMeds = [...data.medications];
+                                    newMeds[index].dosage = e.target.value;
+                                    update({ medications: newMeds });
+                                  }}
+                                  className="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-body-sm font-body-sm"
+                                >
+                                  <option value="" disabled>Select dosage</option>
+                                  <option value="250mg">Low (250mg or less)</option>
+                                  <option value="500mg">Standard (e.g., 500mg)</option>
+                                  <option value="625mg">Standard Plus (e.g., 625mg)</option>
+                                  <option value="1000mg">High (1000mg or more)</option>
+                                </select>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          update({ medications: [...data.medications, { name: '', dosage: '', isCustom: false, customName: '' }] });
+                        }}
+                        className="inline-flex items-center justify-center gap-2 px-4 py-2 border border-primary text-primary hover:bg-primary/10 transition-colors rounded font-label-md mt-sm self-start"
                       >
-                        <option value="" disabled>Select an option</option>
-                        {ANTIBIOTICS.map(a => <option key={a} value={a}>{a}</option>)}
-                      </select>
+                        <span className="material-symbols-outlined">add</span>
+                        Add Medication
+                      </button>
                     </div>
-                    {data.antibiotic_prescribed === 'Other (Type custom medication)' && (
-                      <div className="animate-fade-in">
-                        <label className="block text-label-md font-label-md text-on-surface mb-xs">Custom Medication Name</label>
-                        <input 
-                          type="text"
-                          value={data.custom_medication}
-                          onChange={e => update({ custom_medication: e.target.value })}
-                          className="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-body-md font-body-md"
-                          placeholder="Enter medication name"
-                        />
-                      </div>
-                    )}
-                    {data.antibiotic_prescribed !== '' && (
-                      <div className="animate-fade-in">
-                        <label className="block text-label-md font-label-md text-on-surface mb-xs">Dosage</label>
-                        <select 
-                          value={data.dosage}
-                          onChange={e => update({ dosage: e.target.value })}
-                          className="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-body-md font-body-md"
-                        >
-                          <option value="" disabled>Select dosage</option>
-                          <option value="250mg">Low (250mg or less)</option>
-                          <option value="500mg">Standard (e.g., 500mg)</option>
-                          <option value="625mg">Standard Plus (e.g., 625mg)</option>
-                          <option value="1000mg">High (1000mg or more)</option>
-                        </select>
-                      </div>
-                    )}
+
                     <div className="border-t border-outline-variant pt-md mt-2">
                       <YesNoCard
                         label="Did you get a diagnostic lab test (e.g., blood test, culture) before starting?"

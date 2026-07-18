@@ -25,8 +25,7 @@ export function useAssessment() {
       symptoms: merged.symptoms.map(s => s.toLowerCase()),
       doctor_consulted: merged.doctor_consulted,
       suggestion_source: merged.suggestion_source || null,
-      antibiotic_prescribed: merged.antibiotic_prescribed || null,
-      dosage: merged.dosage || null,
+      medications: merged.medications || [],
       days_prescribed: merged.days_prescribed || null,
       days_completed: merged.days_completed || null,
       doses_skipped: merged.doses_skipped,
@@ -87,7 +86,9 @@ export function useAssessment() {
           weight: r.weight,
           guideline_ref: r.guideline_ref
         })),
-        snippets: snippetsMap
+        snippets: snippetsMap,
+        gender: payload.gender,
+        medications: payload.medications
       }
       const explainData = await getExplanation(explainPayload)
       setExplanation(explainData)

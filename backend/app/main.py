@@ -53,8 +53,7 @@ async def explain_risk(request: ExplanationRequest):
         category=request.category,
         reasons=request.reasons,
         snippets=request.snippets,
-        drug_name=request.drug_name,
-        dosage=request.dosage,
+        medications=request.medications,
         gender=request.gender
     )
 

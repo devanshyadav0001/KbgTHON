@@ -115,7 +115,7 @@ export default function Results() {
             {/* Left Column: Gauge & Analysis (Wider) */}
             <div className="lg:col-span-7 flex flex-col gap-gutter">
               <RiskResult data={assessData} variant="gaugeOnly" />
-              <Explanation explanation={explainData} loading={!explainData && loadingExplain} />
+              <Explanation explanation={explainData} loading={!explainData && loadingExplain} riskScore={assessData.score} />
             </div>
 
             {/* Right Column: Risk Factors List (Narrower) */}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Questionnaire from '../components/Questionnaire/Questionnaire';
 import { useAssessment } from '../hooks/useAssessment';
@@ -7,15 +7,19 @@ import AnalysisProgress from '../components/Questionnaire/AnalysisProgress';
 export default function Assessment() {
   const navigate = useNavigate();
   const { submit, loading, error } = useAssessment();
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleAssessmentSubmit = async (data) => {
+    setIsProcessing(true);
     try {
       const results = await submit(data);
       // Let the animation finish before navigating if it's too fast
       setTimeout(() => {
+        setIsProcessing(false);
         navigate('/results', { state: results });
       }, 4500); // 1.5s per step * 3 steps
     } catch (err) {
+      setIsProcessing(false);
       console.error(err);
     }
   };
@@ -33,9 +37,9 @@ export default function Assessment() {
         </div>
       )}
 
-      {loading && <AnalysisProgress />}
+      {(loading || isProcessing) && <AnalysisProgress />}
 
-      <Questionnaire onSubmit={handleAssessmentSubmit} loading={loading} />
+      <Questionnaire onSubmit={handleAssessmentSubmit} loading={loading || isProcessing} />
     </div>
   );
 }

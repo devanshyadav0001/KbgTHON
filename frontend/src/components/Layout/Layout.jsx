@@ -4,39 +4,44 @@ import { NavLink } from 'react-router-dom';
 export default function Layout({ children }) {
   return (
     <>
-      <nav className="bg-surface border-b border-outline-variant sticky top-0 z-50 w-full flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 mx-auto">
-        <div className="flex items-center gap-lg cursor-pointer max-w-[1440px]">
-          <span className="text-headline-md font-headline-md text-primary tracking-tight">AMR Clinical Portal</span>
-        </div>
-        
-        <div className="hidden md:flex items-center gap-lg h-full">
-          {[
-            { path: '/', label: 'Home' },
-            { path: '/assessment', label: 'Assessment' },
-            { path: '/learn', label: 'Learn' }
-          ].map(item => (
-            <NavLink 
-              key={item.path}
-              to={item.path} 
-              className={({isActive}) => `
-                font-medium hover:text-primary transition-colors hover:scale-95 duration-150 text-label-md font-label-md
-                ${isActive ? 'text-primary border-b-2 border-primary pb-1 font-bold' : 'text-on-surface-variant'}
-              `}
-            >
-              {item.label}
-            </NavLink>
-          ))}
-        </div>
+      {/* Floating Pill Navbar Wrapper */}
+      <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-margin-mobile pointer-events-none">
+        <nav className="pointer-events-auto bg-[#1a1a1a] text-white rounded-full flex items-center justify-between p-2 shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/10 w-full max-w-[800px]">
+          
+          {/* Logo */}
+          <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shrink-0 cursor-pointer group">
+            <span className="material-symbols-outlined text-[#1a1a1a] text-xl group-hover:rotate-12 transition-transform" style={{fontVariationSettings: "'FILL' 0"}}>public</span>
+          </div>
+          
+          {/* Links */}
+          <div className="hidden sm:flex items-center gap-6 px-6">
+            {[
+              { path: '/', label: 'Home' },
+              { path: '/assessment', label: 'Assessment' },
+              { path: '/learn', label: 'Learn' }
+            ].map(item => (
+              <NavLink 
+                key={item.path}
+                to={item.path} 
+                className={({isActive}) => `
+                  font-medium text-sm transition-colors hover:text-white/80
+                  ${isActive ? 'text-white font-semibold' : 'text-white/60'}
+                `}
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          </div>
 
-        <div className="flex items-center gap-sm">
-          <button className="hidden lg:flex text-label-md font-label-md text-secondary border border-secondary px-4 py-2 rounded hover:bg-secondary-fixed-dim transition-colors cursor-pointer">
-            Emergency Guidelines
-          </button>
-          <button className="text-label-md font-label-md bg-primary text-on-primary px-4 py-2 rounded hover:bg-primary-container transition-colors shadow-sm cursor-pointer">
+          {/* Action Button */}
+          <button className="bg-white text-[#1a1a1a] px-5 py-2.5 rounded-full font-medium text-sm hover:bg-gray-100 transition-colors shadow-sm cursor-pointer shrink-0">
             Sign In
           </button>
-        </div>
-      </nav>
+        </nav>
+      </div>
+
+      {/* Spacer to push content down since navbar is fixed */}
+      <div className="h-24 w-full"></div>
 
       <main className="flex-grow w-full max-w-[1440px] mx-auto">
         {children}

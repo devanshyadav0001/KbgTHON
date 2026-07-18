@@ -8,7 +8,7 @@ export default function Layout({ children }) {
   return (
     <>
       {/* Floating Pill Navbar Wrapper */}
-      <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-margin-mobile pointer-events-none">
+      <div className="fixed top-2 left-0 right-0 z-50 flex justify-center px-margin-mobile pointer-events-none">
         <nav className="pointer-events-auto bg-surface/90 backdrop-blur-md text-on-surface rounded-full flex items-center justify-between px-2 py-2 shadow-sm border border-outline-variant/30 w-auto gap-8 transition-all hover:shadow-md">
             
             {/* Logo / Brand */}

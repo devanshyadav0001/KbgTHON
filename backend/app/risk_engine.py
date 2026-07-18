@@ -73,7 +73,8 @@ def evaluate(input_data: QuestionnaireInput) -> RiskResult:
                 guideline_ref=rule['guideline_ref']
             ))
             
-    score = round((raw_sum / MAX_RAW_SUM) * 10, 1)
+    # Cap score at 10.0. 12.0 raw sum points represents a "very high risk" scenario.
+    score = round(min(10.0, (raw_sum / 12.0) * 10), 1)
     
     if red_flags_triggered:
         category = "Urgent Care"

@@ -72,6 +72,7 @@ const YesNoCard = ({ label, description, value, onChange }) => {
 export default function Questionnaire({ onSubmit, loading }) {
   const [data, setData] = useState({
     age: '',
+    gender: '',
     symptoms: [],
     suggestion_source: '',
     antibiotic_prescribed: '',
@@ -149,7 +150,9 @@ export default function Questionnaire({ onSubmit, loading }) {
 
   const canProceed = () => {
     switch (currentStep.id) {
-      case 'context': return data.age > 0 && data.pregnancy !== null && data.chronic_disease !== null;
+      case 'context': 
+        const isAdultFemale = data.gender === 'Female' && parseInt(data.age) >= 18;
+        return data.age > 0 && data.gender !== '' && (!isAdultFemale || data.pregnancy !== null) && data.chronic_disease !== null;
       case 'symptoms': return data.symptoms.length > 0 && data.symptom_duration !== '';
       case 'source': 
         if (data.suggestion_source === '') return false;
@@ -219,24 +222,41 @@ export default function Questionnaire({ onSubmit, loading }) {
               <div className="flex flex-col gap-md">
                 <h1 className="text-headline-sm md:text-headline-md font-headline-sm md:font-headline-md text-on-surface">Patient Context</h1>
                 
-                <div className="mt-2">
-                  <label className="block text-label-md font-label-md text-on-surface mb-xs">Patient Age</label>
-                  <input 
-                    type="number" min="1" max="120"
-                    value={data.age}
-                    onChange={e => update({ age: e.target.value })}
-                    className="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-body-md font-body-md"
-                    placeholder="Enter age"
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-md mt-2">
+                  <div>
+                    <label className="block text-label-md font-label-md text-on-surface mb-xs">Patient Age</label>
+                    <input 
+                      type="number" min="1" max="120"
+                      value={data.age}
+                      onChange={e => update({ age: e.target.value })}
+                      className="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-body-md font-body-md"
+                      placeholder="Enter age"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-label-md font-label-md text-on-surface mb-xs">Patient Gender</label>
+                    <select 
+                      value={data.gender}
+                      onChange={e => update({ gender: e.target.value })}
+                      className="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-body-md font-body-md"
+                    >
+                      <option value="" disabled>Select gender</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
                 </div>
 
-                <div className="mt-6">
-                  <YesNoCard
-                    label="Are you pregnant?"
-                    value={data.pregnancy}
-                    onChange={(v) => update({ pregnancy: v })}
-                  />
-                </div>
+                {data.gender === 'Female' && parseInt(data.age) >= 18 && (
+                  <div className="mt-6 border-t border-outline-variant pt-md">
+                    <YesNoCard
+                      label="Are you pregnant?"
+                      value={data.pregnancy}
+                      onChange={(v) => update({ pregnancy: v })}
+                    />
+                  </div>
+                )}
 
                 <div className="mt-6 border-t border-outline-variant pt-md">
                   <YesNoCard

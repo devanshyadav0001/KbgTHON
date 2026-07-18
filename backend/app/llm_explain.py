@@ -184,7 +184,7 @@ async def _call_llm(api_key, system_prompt):
     return None
 
 
-async def generate_explanation(score: float, category: str, reasons: list, snippets: dict, drug_name: str = None, dosage: str = None) -> ExplanationResponse:
+async def generate_explanation(score: float, category: str, reasons: list, snippets: dict, drug_name: str = None, dosage: str = None, gender: str = None):
     api_key = os.getenv("OPENROUTER_API_KEY")
     if not api_key:
         return ExplanationResponse(explanation=STATIC_FALLBACK, disclaimer=DISCLAIMER, filtered=True)
@@ -195,7 +195,8 @@ async def generate_explanation(score: float, category: str, reasons: list, snipp
         "category": category,
         "reasons": [{"rule_id": r.rule_id, "description": r.description, "weight": r.weight} for r in reasons],
         "drug_name": drug_name,
-        "dosage": dosage
+        "dosage": dosage,
+        "gender": gender
     }, indent=2)
 
     prompt_with_data = SYSTEM_PROMPT.replace("{USER_ANSWERS_JSON}", payload_json)

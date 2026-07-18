@@ -21,6 +21,7 @@ export function useAssessment() {
     // Map frontend field names to backend schema
     const payload = {
       age: merged.age,
+      gender: merged.gender || null,
       symptoms: merged.symptoms.map(s => s.toLowerCase()),
       doctor_consulted: merged.doctor_consulted,
       suggestion_source: merged.suggestion_source || null,
@@ -30,7 +31,12 @@ export function useAssessment() {
       days_completed: merged.days_completed || null,
       doses_skipped: merged.doses_skipped,
       prior_use_6mo: merged.prior_use_6mo,
-      shared_antibiotics: merged.shared_antibiotics
+      shared_antibiotics: merged.shared_antibiotics,
+      symptom_duration: merged.symptom_duration || null,
+      diagnostic_test: merged.diagnostic_test !== undefined ? merged.diagnostic_test : null,
+      kept_leftovers: merged.kept_leftovers !== undefined ? merged.kept_leftovers : null,
+      pregnancy: merged.pregnancy !== undefined ? merged.pregnancy : null,
+      chronic_disease: merged.chronic_disease !== undefined ? merged.chronic_disease : null
     }
 
     try {

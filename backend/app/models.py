@@ -3,6 +3,7 @@ from typing import List, Optional, Dict
 
 class QuestionnaireInput(BaseModel):
     age: int
+    gender: Optional[str] = None
     symptoms: List[str]
     doctor_consulted: bool
     suggestion_source: Optional[str] = None
@@ -37,6 +38,7 @@ class ExplanationRequest(BaseModel):
     category: str
     reasons: List[RiskReason]
     snippets: Dict[str, str]
+    gender: Optional[str] = None
     drug_name: Optional[str] = None
     dosage: Optional[str] = None
 

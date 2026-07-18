@@ -6,6 +6,7 @@ import Results from './pages/Results'
 import Learn from './pages/Learn'
 import Quiz from './pages/Quiz'
 import Emergency from './pages/Emergency'
+import Chatbot from './components/Chatbot/Chatbot'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/emergency" element={<Emergency />} />
         </Routes>
       </Layout>
+      <Chatbot />
     </BrowserRouter>
   )
 }

@@ -10,6 +10,11 @@ from . import risk_engine
 from . import session_store
 from .llm_explain import generate_explanation
 
+# Chatbot imports
+from .schemas import ChatRequest, ChatResponse, Source
+from .rag.retriever import retrieve
+from .rag.generator import generate_answer
+
 env_path = Path(__file__).parent.parent.parent / '.env'
 load_dotenv(dotenv_path=env_path)
 
@@ -56,6 +61,23 @@ async def explain_risk(request: ExplanationRequest):
         medications=request.medications,
         gender=request.gender,
         recent_test_results=request.recent_test_results
+    )
+
+@app.post("/chat", response_model=ChatResponse)
+def chat(request: ChatRequest):
+    docs, metadata = retrieve(request.message)
+    answer = generate_answer(request.message, docs)
+    sources = []
+    for item in metadata:
+        sources.append(
+            Source(
+                source=item["source"],
+                page=item["page"] + 1
+            )
+        )
+    return ChatResponse(
+        answer=answer,
+        sources=sources
     )
 
 @app.get("/health")

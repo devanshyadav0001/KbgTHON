@@ -1,4 +1,11 @@
-import React, { useState } from 'react';
+import re
+
+file_path = 'c:/Users/devan/OneDrive/Documents/kbg thon/frontend/src/pages/Learn.jsx'
+with open(file_path, 'r', encoding='utf-8') as f:
+    content = f.read()
+
+# I will replace the Learn export to include state for accordions and flip cards.
+new_content = """import React, { useState } from 'react';
 
 const MYTH_FACTS = [
   {
@@ -317,3 +324,9 @@ export default function Learn() {
     </div>
   );
 }
+"""
+
+with open(file_path, 'w', encoding='utf-8') as f:
+    f.write(new_content)
+
+print("Replaced Learn.jsx")

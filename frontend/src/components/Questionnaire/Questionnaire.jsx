@@ -23,7 +23,9 @@ const SOURCES = [
   { id: 'Self/Online', label: 'Self / Online Search', icon: 'search' }
 ];
 
-const YesNoCard = ({ label, description, value, onChange }) => (
+const YesNoCard = ({ label, description, value, onChange }) => {
+  const radioName = React.useId();
+  return (
   <div className="flex flex-col gap-md w-full">
     <h1 className="text-headline-sm md:text-headline-md font-headline-sm md:font-headline-md text-on-surface">{label}</h1>
     {description && (
@@ -37,7 +39,7 @@ const YesNoCard = ({ label, description, value, onChange }) => (
       <label className="cursor-pointer relative group">
         <input 
           className="peer sr-only" 
-          name="yesno" 
+          name={radioName} 
           type="radio" 
           checked={value === true}
           onChange={() => onChange(true)}
@@ -51,19 +53,21 @@ const YesNoCard = ({ label, description, value, onChange }) => (
       <label className="cursor-pointer relative group">
         <input 
           className="peer sr-only" 
-          name="yesno" 
+          name={radioName} 
           type="radio" 
           checked={value === false}
           onChange={() => onChange(false)}
         />
         <div className="w-full h-full p-md md:p-lg border border-outline-variant rounded bg-surface-container-lowest flex flex-col items-center justify-center gap-sm transition-all duration-200 peer-checked:border-primary peer-checked:border-2 peer-checked:bg-surface-container-low hover:border-outline peer-focus-visible:ring-2 peer-focus-visible:ring-primary peer-focus-visible:ring-offset-2 min-h-[140px]">
           <span className="material-symbols-outlined text-3xl text-on-surface-variant group-hover:text-on-surface peer-checked:text-primary transition-colors">cancel</span>
+
           <span className="text-label-md font-label-md text-on-surface-variant group-hover:text-on-surface peer-checked:text-primary peer-checked:font-bold transition-all">No</span>
         </div>
       </label>
     </div>
   </div>
-);
+  );
+};
 
 export default function Questionnaire({ onSubmit, loading }) {
   const [data, setData] = useState({
@@ -352,14 +356,18 @@ export default function Questionnaire({ onSubmit, loading }) {
                     )}
                     {data.antibiotic_prescribed !== '' && (
                       <div className="animate-fade-in">
-                        <label className="block text-label-md font-label-md text-on-surface mb-xs">Dosage (e.g., 500mg, 650mg)</label>
-                        <input 
-                          type="text"
+                        <label className="block text-label-md font-label-md text-on-surface mb-xs">Dosage</label>
+                        <select 
                           value={data.dosage}
                           onChange={e => update({ dosage: e.target.value })}
                           className="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-body-md font-body-md"
-                          placeholder="Enter dosage amount (required)"
-                        />
+                        >
+                          <option value="" disabled>Select dosage</option>
+                          <option value="250mg">Low (250mg or less)</option>
+                          <option value="500mg">Standard (e.g., 500mg)</option>
+                          <option value="625mg">Standard Plus (e.g., 625mg)</option>
+                          <option value="1000mg">High (1000mg or more)</option>
+                        </select>
                       </div>
                     )}
                     <div className="border-t border-outline-variant pt-md mt-2">
@@ -382,23 +390,37 @@ export default function Questionnaire({ onSubmit, loading }) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-md mt-sm">
                   <div>
                     <label className="block text-label-md font-label-md text-on-surface mb-xs">Days Planned/Prescribed</label>
-                    <input 
-                      type="number" min="0"
+                    <select 
                       value={data.days_prescribed}
                       onChange={e => update({ days_prescribed: e.target.value })}
                       className="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-body-md font-body-md"
-                      placeholder="e.g. 7"
-                    />
+                    >
+                      <option value="" disabled>Select duration</option>
+                      <option value="1">1-2 days</option>
+                      <option value="3">3 days</option>
+                      <option value="5">5 days</option>
+                      <option value="7">7 days</option>
+                      <option value="10">10 days</option>
+                      <option value="14">14 days</option>
+                      <option value="21">More than 14 days</option>
+                    </select>
                   </div>
                   <div>
-                    <label className="block text-label-md font-label-md text-on-surface mb-xs">Days Completed</label>
-                    <input 
-                      type="number" min="0"
+                    <label className="block text-label-md font-label-md text-on-surface mb-xs">Days Actually Completed</label>
+                    <select 
                       value={data.days_completed}
                       onChange={e => update({ days_completed: e.target.value })}
                       className="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-body-md font-body-md"
-                      placeholder="e.g. 3"
-                    />
+                    >
+                      <option value="" disabled>Select completed</option>
+                      <option value="1">1-2 days</option>
+                      <option value="3">3 days</option>
+                      <option value="5">5 days</option>
+                      <option value="7">7 days</option>
+                      <option value="10">10 days</option>
+                      <option value="14">14 days</option>
+                      <option value="21">More than 14 days</option>
+                    </select>
                   </div>
                 </div>
 

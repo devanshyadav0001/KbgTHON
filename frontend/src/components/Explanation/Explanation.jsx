@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import RiskChart from './RiskChart';
 
 export default function Explanation({ explanation, loading, riskScore }) {
   const [showReasoning, setShowReasoning] = useState(false);
@@ -106,8 +107,11 @@ export default function Explanation({ explanation, loading, riskScore }) {
         </div>
       )}
 
+      {/* Risk Trajectory Chart */}
+      <RiskChart currentScore={riskScore} />
+
       {/* Reasoning Steps Accordion */}
-      <div className="mb-lg border border-outline-variant rounded-lg overflow-hidden">
+      <div className="mb-lg border border-outline-variant rounded-lg overflow-hidden mt-6">
         <button 
           onClick={() => setShowReasoning(!showReasoning)}
           className="w-full flex justify-between items-center p-md bg-surface hover:bg-surface-container-low transition-colors text-left"

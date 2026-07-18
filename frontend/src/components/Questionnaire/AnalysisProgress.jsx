@@ -20,11 +20,11 @@ export default function AnalysisProgress() {
 
   return (
     <div className="fixed inset-0 bg-surface/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-      <div className="bg-surface-container-lowest border border-outline-variant p-xl rounded-xl shadow-lg max-w-md w-full flex flex-col items-center">
+      <div className="bg-surface-container-lowest border border-outline-variant p-xl rounded-xl shadow-lg w-full max-w-[450px] min-w-[300px] flex flex-col items-center">
         <span className="material-symbols-outlined text-primary text-5xl mb-md animate-spin" style={{fontVariationSettings: "'FILL' 1"}}>sync</span>
         <h2 className="text-headline-md font-headline-md text-on-surface mb-xl text-center">Processing Assessment</h2>
         
-        <div className="w-full flex flex-col gap-sm">
+        <div className="w-full flex flex-col gap-md">
           {STEPS.map((text, idx) => {
             const isCompleted = idx < step;
             const isActive = idx === step;

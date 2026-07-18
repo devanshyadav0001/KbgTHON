@@ -5,32 +5,15 @@ export default function Layout({ children }) {
   const location = useLocation();
   const isLanding = location.pathname === '/';
 
-  const [isDark, setIsDark] = useState(() => {
-    return localStorage.getItem('theme') === 'dark';
-  });
-
-  useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-  }, [isDark]);
-
   return (
     <>
       {/* Floating Pill Navbar Wrapper */}
       <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-margin-mobile pointer-events-none">
-        <nav className="pointer-events-auto bg-[#182420] text-[#eff1e7] rounded-full flex items-center justify-between px-1.5 py-1.5 shadow-md border border-[#eff1e7]/10 w-auto gap-4">
+        <nav className="pointer-events-auto bg-surface text-on-surface rounded-full flex items-center justify-between px-1.5 py-1.5 shadow-md border border-outline/20 w-auto gap-4">
             
-            {/* Logo / Theme Toggle */}
-            <div 
-              onClick={() => setIsDark(!isDark)}
-              className="w-8 h-8 rounded-full bg-[#3b6e52] flex items-center justify-center shrink-0 cursor-pointer group ml-1"
-            >
-              <span className="material-symbols-outlined text-white text-lg group-hover:rotate-12 transition-transform select-none" title="Toggle Theme" style={{fontVariationSettings: "'FILL' 0"}}>public</span>
+            {/* Logo */}
+            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0 ml-1">
+              <span className="material-symbols-outlined text-on-primary text-lg select-none" style={{fontVariationSettings: "'FILL' 0"}}>public</span>
             </div>
             
             {/* Links */}
@@ -45,9 +28,9 @@ export default function Layout({ children }) {
                   key={item.label}
                   to={item.path} 
                   className={({isActive}) => `
-                    font-medium transition-all hover:text-[#3b6e52] flex items-center justify-center
-                    ${item.label === 'Learn' ? 'text-xs px-2.5 py-1 bg-[#eff1e7]/10 text-[#eff1e7] rounded-full border border-transparent shadow-sm hover:bg-[#eff1e7]/20' : 'text-xs'}
-                    ${isActive && item.path !== '/' ? 'text-[#3b6e52] font-bold' : 'text-[#eff1e7]/80'}
+                    font-medium transition-all hover:text-primary flex items-center justify-center
+                    ${item.label === 'Learn' ? 'text-xs px-2.5 py-1 bg-primary/10 text-primary rounded-full border border-transparent shadow-sm hover:bg-primary/20' : 'text-xs'}
+                    ${isActive && item.path !== '/' ? 'text-primary font-bold' : 'text-on-surface-variant'}
                   `}
                 >
                   {item.label}
@@ -56,7 +39,7 @@ export default function Layout({ children }) {
             </div>
 
             {/* Action Button */}
-            <NavLink to="/assessment" className="bg-[#3b6e52] text-white px-5 py-1.5 rounded-full font-medium text-xs hover:bg-[#3b6e52]/90 transition-colors shadow-sm cursor-pointer shrink-0 mr-1">
+            <NavLink to="/assessment" className="bg-primary text-on-primary px-5 py-1.5 rounded-full font-medium text-xs hover:bg-primary/90 transition-colors shadow-sm cursor-pointer shrink-0 mr-1">
               Start Check
             </NavLink>
           </nav>

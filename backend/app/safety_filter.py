@@ -29,13 +29,10 @@ DIAGNOSTIC_PHRASES_PATTERN = re.compile(r'\b(?:' + '|'.join(d for d in DIAGNOSTI
 
 def check_safety(text: str) -> Tuple[bool, List[str]]:
     violations = []
-    # Drug names and dosages are now ALLOWED for educational purposes, per user request.
-    # if DRUG_NAMES_PATTERN.search(text):
-    #     violations.append("Mentioned drug names")
-    # if DOSAGE_UNITS_PATTERN.search(text):
-    #     violations.append("Mentioned dosage units")
-    
-    # We still prevent the LLM from trying to diagnose the patient
+    if DRUG_NAMES_PATTERN.search(text):
+        violations.append("Mentioned drug names")
+    if DOSAGE_UNITS_PATTERN.search(text):
+        violations.append("Mentioned dosage units")
     if DIAGNOSTIC_PHRASES_PATTERN.search(text):
         violations.append("Contained diagnostic phrasing")
         

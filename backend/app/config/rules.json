@@ -1,18 +1,9 @@
 [
-  { "id": "RULE-01", "condition": "suggestion_source in ['Pharmacist', 'Friend/Family', 'Self/Online']", "weight": 3, "guideline_ref": "GDL-01", "description": "No formal medical consultation before antibiotic use" },
+  { "id": "RULE-01", "condition": "doctor_consulted == false", "weight": 3, "guideline_ref": "GDL-01", "description": "No medical consultation before antibiotic use" },
   { "id": "RULE-02", "condition": "days_completed < days_prescribed", "weight": 4, "guideline_ref": "GDL-02", "description": "Antibiotic course stopped early" },
-  { "id": "RULE-03", "condition": "suggestion_source == 'Self/Online'", "weight": 3, "guideline_ref": "GDL-03", "description": "High-risk self-medication or leftover antibiotic use" },
-  { "id": "RULE-04", "condition": "viral_symptom_pattern and suggestion_source != 'Doctor'", "weight": 2, "guideline_ref": "GDL-04", "description": "Antibiotic use for likely viral symptoms without consultation" },
+  { "id": "RULE-03", "condition": "self_medicated == true", "weight": 3, "guideline_ref": "GDL-03", "description": "Self-medication or leftover antibiotic use" },
+  { "id": "RULE-04", "condition": "viral_symptom_pattern AND NOT doctor_consulted", "weight": 2, "guideline_ref": "GDL-04", "description": "Antibiotic use for likely viral symptoms without consultation" },
   { "id": "RULE-05", "condition": "doses_skipped == true", "weight": 2, "guideline_ref": "GDL-05", "description": "Doses skipped during antibiotic course" },
-  { "id": "RULE-06", "condition": "prior_use_6mo == true", "weight": 1, "guideline_ref": "GDL-06", "description": "Repeated antibiotic use within 3-6 months" },
-  { "id": "RULE-07", "condition": "shared_antibiotics == true", "weight": 2, "guideline_ref": "GDL-07", "description": "Shared antibiotics with others" },
-  { "id": "RULE-08", "condition": "suggestion_source == 'Pharmacist'", "weight": 2, "guideline_ref": "GDL-01", "description": "OTC dispensing without a formal prescription (Common AMR driver)" },
-  { "id": "RULE-09", "condition": "antibiotic_prescribed in ['Paracetamol / Dolo / Calpol (Painkiller)', 'Ibuprofen / Combiflam (Painkiller)']", "weight": 3, "guideline_ref": "GDL-08", "description": "Misidentifying basic painkillers as antibiotics indicates dangerous knowledge gaps" },
-  { "id": "RULE-10", "condition": "age < 15 and is_high_dose(dosage)", "weight": 3, "guideline_ref": "GDL-09", "description": "High adult-level dosage given to a pediatric patient" },
-  { "id": "RULE-11", "condition": "diagnostic_test == false and suggestion_source != 'Doctor'", "weight": 3, "guideline_ref": "GDL-10", "description": "Taking antibiotics without proper diagnostic testing" },
-  { "id": "RULE-12", "condition": "kept_leftovers == true", "weight": 2, "guideline_ref": "GDL-11", "description": "Keeping leftover antibiotics for future use" },
-  { "id": "RULE-13", "condition": "symptom_duration == 'Less than 3 days' and viral_symptom_pattern", "weight": 2, "guideline_ref": "GDL-12", "description": "Immediate antibiotic use for short-duration likely viral symptoms" },
-  { "id": "RULE-14", "condition": "age > 65", "weight": 2, "guideline_ref": "GDL-13", "description": "Geriatric patient profile increases susceptibility to adverse AMR events" },
-  { "id": "RULE-15", "condition": "pregnancy == true", "weight": 3, "guideline_ref": "GDL-14", "description": "Pregnancy requires strict specialist oversight for any antibiotic use" },
-  { "id": "RULE-16", "condition": "chronic_disease == true", "weight": 2, "guideline_ref": "GDL-15", "description": "Pre-existing chronic conditions amplify the risk of resistant opportunistic infections" }
+  { "id": "RULE-06", "condition": "prior_use_6mo == true", "weight": 1, "guideline_ref": "GDL-06", "description": "Repeated antibiotic use within 6 months" },
+  { "id": "RULE-07", "condition": "shared_antibiotics == true", "weight": 2, "guideline_ref": "GDL-07", "description": "Shared antibiotics with others" }
 ]

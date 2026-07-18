@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import RiskResult from '../components/RiskResult/RiskResult';
 import Explanation from '../components/Explanation/Explanation';
+import RiskChart from '../components/Explanation/RiskChart';
 import Disclaimer from '../components/Disclaimer/Disclaimer';
 import { getGuideline, getExplanation } from '../utils/api';
 
@@ -119,8 +120,11 @@ export default function Results() {
             </div>
 
             {/* Right Column: Risk Factors List (Narrower) */}
-            <div className="lg:col-span-5 flex flex-col">
+            <div className="lg:col-span-5 flex flex-col gap-gutter">
               <RiskResult data={assessData} variant="factorsOnly" />
+              <div className="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm p-lg">
+                <RiskChart currentScore={assessData.score} />
+              </div>
             </div>
           </>
         )}

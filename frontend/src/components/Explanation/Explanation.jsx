@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react';
-import RiskChart from './RiskChart';
 
 export default function Explanation({ explanation, loading, riskScore }) {
   const [showReasoning, setShowReasoning] = useState(false);
@@ -128,8 +127,7 @@ export default function Explanation({ explanation, loading, riskScore }) {
         </div>
       )}
 
-      {/* Risk Trajectory Chart */}
-      <RiskChart currentScore={riskScore} />
+      {/* Risk Trajectory Chart Removed from here */}
 
       {/* Reasoning Steps Accordion — now uses dynamic ai_meta data */}
       <div className="mb-lg border border-outline-variant rounded-lg overflow-hidden mt-6">

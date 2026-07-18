@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 
 <html lang="en"><head><base target="_parent"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script>
   document.addEventListener("click", function(e) {
     let node = e.target;
@@ -31,7 +34,7 @@
 /* Hide original navbar */
 header { display: none !important; }
 #root > div > :nth-child(2) { 
-  background-image: url('/landing-bg.png') !important;
+  background-image: linear-gradient(rgba(244, 246, 238, 0.85), rgba(244, 246, 238, 0.85)), url('/landing-bg.png') !important;
   background-size: cover !important;
   background-position: center !important;
   background-repeat: no-repeat !important;

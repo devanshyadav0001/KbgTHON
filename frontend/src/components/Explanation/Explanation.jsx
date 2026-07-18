@@ -1,6 +1,22 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 export default function Explanation({ explanation, loading }) {
+  const parsedData = useMemo(() => {
+    if (!explanation || !explanation.explanation) return null;
+    try {
+      return JSON.parse(explanation.explanation);
+    } catch (e) {
+      // Fallback if not valid JSON
+      return {
+        headline: "Clinical Synthesis",
+        personalized_summary: explanation.explanation,
+        score_breakdown: null,
+        risk_vectors: null,
+        behaviour_change_tips: null
+      };
+    }
+  }, [explanation]);
+
   if (loading) {
     return (
       <section className="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm h-full flex flex-col relative overflow-hidden">
@@ -18,7 +34,7 @@ export default function Explanation({ explanation, loading }) {
     );
   }
 
-  if (!explanation) return null;
+  if (!parsedData) return null;
 
   return (
     <section className="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm h-full flex flex-col relative overflow-hidden animate-fade-in mt-xl">
@@ -34,11 +50,55 @@ export default function Explanation({ explanation, loading }) {
         )}
       </div>
       
-      <div className="text-on-surface-variant font-body-md text-body-md space-y-md">
-        {explanation.explanation.split('\n').map((paragraph, idx) => (
-          paragraph.trim() ? <p key={idx}>{paragraph}</p> : null
-        ))}
+      <div className="mb-md">
+        <h3 className="text-headline-sm font-headline-sm text-primary mb-2">{parsedData.headline}</h3>
+        <p className="text-body-md font-body-md text-on-surface-variant">{parsedData.personalized_summary}</p>
       </div>
+
+      {parsedData.risk_vectors && parsedData.risk_vectors.length > 0 && (
+        <div className="mb-md">
+          <h4 className="text-label-md font-bold text-on-surface mb-2">Key Risk Vectors</h4>
+          <ul className="list-disc pl-5 space-y-2">
+            {parsedData.risk_vectors.map((vector, i) => (
+              <li key={i} className="text-body-sm text-on-surface-variant">
+                <strong>{vector.label} ({vector.severity}):</strong> {vector.details}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {parsedData.score_breakdown && parsedData.score_breakdown.components && parsedData.score_breakdown.components.length > 0 && (
+        <div className="mb-md">
+          <h4 className="text-label-md font-bold text-on-surface mb-2">Score Breakdown</h4>
+          <div className="space-y-3">
+            {parsedData.score_breakdown.components.map((comp, i) => (
+              <div key={i} className="flex justify-between items-center bg-surface-container-low p-2 rounded border border-outline-variant/50">
+                <div className="flex flex-col">
+                  <span className="text-label-sm font-bold text-on-surface">{comp.label}</span>
+                  <span className="text-xs text-on-surface-variant">{comp.reason}</span>
+                </div>
+                <span className="text-primary font-bold">+{comp.points}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {parsedData.behaviour_change_tips && parsedData.behaviour_change_tips.length > 0 && (
+        <div>
+          <h4 className="text-label-md font-bold text-on-surface mb-2">Recommendations</h4>
+          <ul className="space-y-2">
+            {parsedData.behaviour_change_tips.map((tip, i) => (
+              <li key={i} className="text-body-sm text-on-surface-variant flex items-start gap-2">
+                <span className="material-symbols-outlined text-primary text-sm mt-0.5">check_circle</span>
+                <span>{tip}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
     </section>
   );
 }

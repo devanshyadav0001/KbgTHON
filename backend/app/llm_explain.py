@@ -8,17 +8,19 @@ from .safety_filter import filter_output
 
 SYSTEM_PROMPT = """You generate a short, plain-language explanation of antimicrobial resistance risk for a general audience.
 You will be given: a risk score, a list of triggered risk reasons, and a paraphrased public-health guideline snippet for each reason.
+You may also be given the drug name and dosage the user entered.
+
 Rules:
-- Under 100 words.
+- Under 120 words.
 - Do not diagnose any illness as bacterial or viral.
-- Do not name or suggest any antibiotic, drug, or dosage.
-- Do not give any treatment instruction.
+- Do not give any treatment instruction or prescribe any drug.
+- If the user entered a painkiller (like Paracetamol/Dolo) or a high dosage, use it to educate them based on the guidelines.
 - Always end with: "Please consult a registered medical practitioner."
-- Explain only why the reported behavior is associated with antimicrobial resistance, based on the provided guideline snippet."""
+- Explain only why the reported behavior is associated with antimicrobial resistance (or medical risk), based on the provided guideline snippets."""
 
-STRICTER_FALLBACK_PROMPT = SYSTEM_PROMPT + "\nCRITICAL: You must not mention any medication name, dosage, or diagnostic statement under any circumstances. Respond ONLY about behavioral risk factors."
+STRICTER_FALLBACK_PROMPT = SYSTEM_PROMPT + "\nCRITICAL: You must not prescribe medication or give diagnostic statements under any circumstances. Respond ONLY about behavioral risk factors and educational clarification."
 
-STATIC_FALLBACK = "Based on the assessment, your antibiotic usage patterns may contribute to antimicrobial resistance risk. Please consult a registered medical practitioner for personalized guidance."
+STATIC_FALLBACK = "Based on the assessment, your usage patterns may contribute to antimicrobial resistance risk or other health risks. Please consult a registered medical practitioner for personalized guidance."
 DISCLAIMER = "This application is not a diagnostic tool. It cannot identify bacterial infection or prescribe treatment. Always consult a registered medical practitioner."
 
 MAX_RETRIES = 3
@@ -34,7 +36,7 @@ def _make_openrouter_request(api_key, user_prompt, system_prompt):
     }
     
     payload = {
-        "model": "google/gemini-2.0-flash-lite-preview-02-05:free",
+        "model": "meta-llama/llama-3.3-70b-instruct:free",
         "messages": [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}
@@ -78,7 +80,7 @@ async def _call_llm(api_key, user_prompt, system_prompt):
     return None
 
 
-async def generate_explanation(score: float, category: str, reasons: list, snippets: dict) -> ExplanationResponse:
+async def generate_explanation(score: float, category: str, reasons: list, snippets: dict, drug_name: str = None, dosage: str = None) -> ExplanationResponse:
     # First try OPENROUTER_API_KEY, fallback to GEMINI_API_KEY if we want to support both, but we are switching to OpenRouter
     api_key = os.getenv("OPENROUTER_API_KEY")
     if not api_key:
@@ -88,6 +90,12 @@ async def generate_explanation(score: float, category: str, reasons: list, snipp
     user_prompt = f"Risk Score: {score}/10 ({category} Risk)\nTriggered Risk Factors:\n"
     for r in reasons:
         user_prompt += f"- {r.description} (+{r.weight} pts)\n"
+        
+    if drug_name:
+        user_prompt += f"\nDrug Entered: {drug_name}"
+    if dosage:
+        user_prompt += f"\nDosage Entered: {dosage}\n"
+        
     user_prompt += "\nRelevant WHO/CDC/ICMR Guidelines:\n"
     for ref_id, snippet in snippets.items():
         user_prompt += f"[{ref_id}]: {snippet}\n"

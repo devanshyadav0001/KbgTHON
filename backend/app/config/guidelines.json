@@ -30,8 +30,18 @@
     "source": "ICMR AMR Action Plan"
   },
   "GDL-07": {
-    "title": "Never Share Antibiotics",
-    "snippet": "Sharing antibiotics with family members or friends means the wrong drug for the wrong infection. This dangerous practice promotes the spread of resistant bacteria.",
-    "source": "FDA / WHO Safe Use Guidelines"
+    "title": "Do Not Share Antibiotics",
+    "snippet": "Sharing antibiotics with family or friends without a doctor's evaluation is highly discouraged. What worked for one person's infection may be inappropriate for another, driving resistance.",
+    "source": "WHO AWaRe Guidelines"
+  },
+  "GDL-08": {
+    "title": "Painkillers Are Not Antibiotics",
+    "snippet": "Medicines like Paracetamol, Dolo, or Ibuprofen are painkillers and fever reducers. They do NOT treat bacterial infections. Misidentifying them as antibiotics indicates a need for better medical literacy to prevent future misuse of actual antibiotics.",
+    "source": "Clinical Safety Guidelines"
+  },
+  "GDL-09": {
+    "title": "Age-Appropriate Dosing",
+    "snippet": "Medication dosage must be carefully adjusted for children. Giving adult dosages (like 500mg or 650mg) to young children can cause severe toxicity and is a hallmark of unsafe self-medication practices.",
+    "source": "Pediatric Safety Guidelines"
   }
 }

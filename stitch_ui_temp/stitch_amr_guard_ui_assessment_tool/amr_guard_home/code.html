@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AMR Guard | AI-Powered Antibiotic Risk Assessment</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;family=Outfit:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed": "#00201c",
+                    "surface-container-high": "#25293a",
+                    "surface-container-lowest": "#090e1c",
+                    "on-secondary-fixed-variant": "#004e5c",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "tertiary": "#4edea3",
+                    "surface-bright": "#343949",
+                    "on-primary": "#003731",
+                    "on-secondary": "#003640",
+                    "primary-container": "#14b8a6",
+                    "inverse-on-surface": "#2b3040",
+                    "on-tertiary-container": "#00442c",
+                    "inverse-surface": "#dee1f7",
+                    "surface-container-low": "#161b2b",
+                    "on-tertiary-fixed": "#002113",
+                    "surface-tint": "#4fdbc8",
+                    "tertiary-container": "#16bb83",
+                    "on-background": "#dee1f7",
+                    "background": "#0e1322",
+                    "surface": "#0e1322",
+                    "secondary": "#4cd7f6",
+                    "secondary-container": "#03b5d3",
+                    "on-surface-variant": "#bbcac6",
+                    "inverse-primary": "#006b5f",
+                    "secondary-fixed-dim": "#4cd7f6",
+                    "error-container": "#93000a",
+                    "on-surface": "#dee1f7",
+                    "on-primary-fixed-variant": "#005048",
+                    "primary": "#4fdbc8",
+                    "on-error-container": "#ffdad6",
+                    "surface-variant": "#2f3445",
+                    "tertiary-fixed": "#6ffbbe",
+                    "on-secondary-fixed": "#001f26",
+                    "primary-fixed": "#71f8e4",
+                    "on-tertiary": "#003824",
+                    "primary-fixed-dim": "#4fdbc8",
+                    "outline-variant": "#3c4947",
+                    "surface-container": "#1a1f2f",
+                    "error": "#ffb4ab",
+                    "on-error": "#690005",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "on-secondary-container": "#00424e",
+                    "surface-dim": "#0e1322",
+                    "surface-container-highest": "#2f3445",
+                    "on-primary-container": "#00423b",
+                    "outline": "#859490",
+                    "secondary-fixed": "#acedff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "3xl": "64px",
+                    "base": "4px",
+                    "container-max": "1280px",
+                    "xs": "4px",
+                    "lg": "24px",
+                    "2xl": "48px",
+                    "sm": "8px",
+                    "xl": "32px",
+                    "gutter": "24px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "headline-md": ["Outfit"],
+                    "display-lg-mobile": ["Outfit"],
+                    "label-caps": ["JetBrains Mono"],
+                    "body-sm": ["Inter"],
+                    "headline-lg": ["Outfit"],
+                    "display-lg": ["Outfit"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "800"}],
+                    "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.12);
+            transform: translateY(-4px);
+        }
+        .gradient-text-teal {
+            background: linear-gradient(135deg, #4fdbc8 0%, #4cd7f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-bg-teal {
+            background: linear-gradient(135deg, #14b8a6 0%, #03b5d3 100%);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .scroll-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary/30">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/70 backdrop-blur-xl border-b border-white/10 shadow-sm">
+<div class="flex items-center justify-between px-lg py-md max-w-container-max mx-auto">
+<div class="flex items-center gap-sm">
+<span class="font-headline-md text-headline-md font-bold text-primary">AMR Guard</span>
+</div>
+<nav class="hidden md:flex items-center gap-xl">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 cursor-pointer active:scale-95 transition-all duration-300" href="#">Home</a>
+<a class="text-on-surface-variant font-body-md hover:text-secondary cursor-pointer active:scale-95 transition-all duration-300" href="#">Assessment</a>
+<a class="text-on-surface-variant font-body-md hover:text-secondary cursor-pointer active:scale-95 transition-all duration-300" href="#">Learn</a>
+</nav>
+<div class="text-on-surface-variant font-body-sm opacity-60">v1.0 Beta</div>
+</div>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="relative h-screen flex items-center justify-center overflow-hidden">
+<!-- STITCH_SHADER_START:ANIMATION_1 class="absolute inset-0 w-full h-full pointer-events-none opacity-40" -->
+<div class="absolute inset-0 w-full h-full pointer-events-none opacity-40" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_1" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_1');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+varying vec2 v_texCoord;
+uniform float u_time;
+uniform vec2 u_resolution;
+
+void main() {
+    vec2 uv = v_texCoord;
+    
+    // Create slow moving blobs
+    float t = u_time * 0.15;
+    
+    vec2 p1 = vec2(0.5 + 0.3 * sin(t), 0.5 + 0.2 * cos(t * 0.8));
+    vec2 p2 = vec2(0.5 + 0.4 * cos(t * 0.7), 0.2 + 0.3 * sin(t * 0.9));
+    vec2 p3 = vec2(0.2 + 0.2 * sin(t * 1.2), 0.8 + 0.1 * cos(t * 0.5));
+    
+    float d1 = 1.0 - smoothstep(0.0, 0.8, distance(uv, p1));
+    float d2 = 1.0 - smoothstep(0.0, 0.7, distance(uv, p2));
+    float d3 = 1.0 - smoothstep(0.0, 0.9, distance(uv, p3));
+    
+    vec3 navy = vec3(0.039, 0.059, 0.118); // #0a0f1e
+    vec3 teal = vec3(0.078, 0.722, 0.651); // #14b8a6
+    vec3 cyan = vec3(0.024, 0.714, 0.831); // #06b6d4
+    
+    vec3 color = navy;
+    color = mix(color, teal, d1 * 0.15);
+    color = mix(color, cyan, d2 * 0.12);
+    color = mix(color, teal, d3 * 0.1);
+    
+    // Add subtle noise
+    float noise = fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453);
+    color += noise * 0.01;
+    
+    gl_FragColor = vec4(color, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_1 -->
+<div class="relative z-10 max-w-4xl px-lg text-center">
+<p class="font-label-caps text-label-caps tracking-[0.2em] text-secondary mb-md animate-fade-in">
+                    AI-POWERED AWARENESS TOOL
+                </p>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-lg animate-fade-in delay-1">
+                    Understand Your Antibiotic <span class="gradient-text-teal">Risk</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-xl max-w-2xl mx-auto animate-fade-in delay-2">
+                    Answer a few quick questions to receive a personalized analysis of your antimicrobial resistance exposure, grounded in WHO and CDC guidelines.
+                </p>
+<div class="animate-fade-in delay-3">
+<button class="gradient-bg-teal px-xl py-md rounded-xl font-headline-md text-on-primary-container font-bold shadow-[0_0_20px_rgba(20,184,166,0.3)] hover:shadow-[0_0_35px_rgba(20,184,166,0.5)] transition-all duration-300 active:scale-95 flex items-center gap-sm mx-auto group">
+                        Start Assessment
+                        <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Scroll Indicator -->
+<div class="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce opacity-40">
+<span class="material-symbols-outlined text-3xl">keyboard_double_arrow_down</span>
+</div>
+</section>
+<!-- Stats Row -->
+<section class="py-2xl max-w-container-max mx-auto px-lg">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg scroll-reveal">
+<!-- Card 1 -->
+<div class="glass-card p-xl rounded-xl flex flex-col items-center text-center">
+<div class="w-12 h-12 rounded-full bg-error/10 flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-error" data-weight="fill">skull</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg mb-xs">4.95M</h3>
+<p class="font-body-md text-on-surface-variant">Deaths associated with AMR annually</p>
+</div>
+<!-- Card 2 -->
+<div class="glass-card p-xl rounded-xl flex flex-col items-center text-center">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-primary" data-weight="fill">medication</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg mb-xs">30%</h3>
+<p class="font-body-md text-on-surface-variant">Unnecessary antibiotic prescriptions in clinical settings</p>
+</div>
+<!-- Card 3 -->
+<div class="glass-card p-xl rounded-xl flex flex-col items-center text-center">
+<div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-secondary" data-weight="fill">microwave</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg mb-xs">12 vs 60+</h3>
+<p class="font-body-md text-on-surface-variant">New antibiotics developed vs. high-priority resistant strains</p>
+</div>
+</div>
+<p class="text-center mt-xl font-body-sm text-on-surface-variant opacity-40 scroll-reveal">
+                Sources: World Health Organization (WHO) and Centers for Disease Control and Prevention (CDC)
+            </p>
+</section>
+<!-- How It Works Section -->
+<section class="py-3xl bg-surface-container-low/30 relative">
+<div class="max-w-container-max mx-auto px-lg">
+<div class="text-center mb-2xl scroll-reveal">
+<h2 class="font-headline-lg text-headline-lg mb-md">How AMR Guard Protects You</h2>
+<div class="h-1 w-24 gradient-bg-teal mx-auto rounded-full"></div>
+</div>
+<div class="flex flex-col md:flex-row gap-xl md:gap-0 items-center justify-between relative scroll-reveal">
+<!-- Step 1 -->
+<div class="flex-1 flex flex-col items-center text-center group z-10">
+<div class="w-20 h-20 rounded-2xl glass-card flex items-center justify-center mb-lg group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-primary text-4xl">quiz</span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-sm">Answer Questions</h4>
+<p class="font-body-md text-on-surface-variant max-w-xs">Simple non-diagnostic survey about your history and habits.</p>
+</div>
+<!-- Line Divider 1 -->
+<div class="hidden md:block w-32 h-[2px] bg-white/5 relative top-[-40px]">
+<div class="absolute inset-0 gradient-bg-teal w-0 group-hover:w-full transition-all duration-1000"></div>
+</div>
+<!-- Step 2 -->
+<div class="flex-1 flex flex-col items-center text-center group z-10">
+<div class="w-20 h-20 rounded-2xl glass-card flex items-center justify-center mb-lg group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-secondary text-4xl">analytics</span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-sm">Risk Analysis</h4>
+<p class="font-body-md text-on-surface-variant max-w-xs">Cross-referencing your data with global resistance trends.</p>
+</div>
+<!-- Line Divider 2 -->
+<div class="hidden md:block w-32 h-[2px] bg-white/5 relative top-[-40px]"></div>
+<!-- Step 3 -->
+<div class="flex-1 flex flex-col items-center text-center group z-10">
+<div class="w-20 h-20 rounded-2xl glass-card flex items-center justify-center mb-lg group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-tertiary text-4xl">psychology_alt</span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-sm">AI Explanation</h4>
+<p class="font-body-md text-on-surface-variant max-w-xs">Detailed insights into how resistance works and your personal score.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-3xl px-lg">
+<div class="max-w-4xl mx-auto rounded-3xl glass-card p-2xl text-center relative overflow-hidden group scroll-reveal">
+<div class="absolute -top-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all duration-700"></div>
+<div class="absolute -bottom-24 -left-24 w-64 h-64 bg-secondary/10 rounded-full blur-3xl group-hover:bg-secondary/20 transition-all duration-700"></div>
+<h2 class="font-headline-lg text-headline-lg mb-md">Ready to secure your medical future?</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-xl">Empower yourself with knowledge. Join 50,000+ users tracking global resistance patterns.</p>
+<button class="gradient-bg-teal px-2xl py-md rounded-xl font-headline-md text-on-primary-container font-bold shadow-lg hover:scale-105 transition-all">
+                    Launch Assessment Now
+                </button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-md px-lg bg-surface-container-lowest border-t border-white/5">
+<div class="flex flex-col md:flex-row justify-between items-center text-center gap-md max-w-container-max mx-auto">
+<div class="font-label-caps text-label-caps text-primary">AMR Guard</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">© 2024 AMR Guard. Data sourced from WHO and CDC.</p>
+<div class="flex gap-lg">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Medical Disclaimer</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+<script>
+        // Simple Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+
+        // Interactive card hover effect using JS for precise lighting
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+</body></html>

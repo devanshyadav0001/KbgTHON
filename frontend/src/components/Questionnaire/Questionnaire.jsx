@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 
-const SYMPTOMS = ["Fever", "Cough", "Cold", "Sore throat", "Runny nose", "Body ache", "Diarrhea", "Stomach ache", "Urinary pain", "Skin infection", "Wound/Cut", "Other"];
+const SYMPTOMS = ["Fever", "Cough", "Cold", "Sore throat", "Runny nose", "Body ache", "Dengue-like fever", "High persistent fever", "Confusion", "Breathlessness", "Severe abdominal pain", "Urinary pain", "Skin infection", "Other"];
 const ANTIBIOTICS = [
   "Amoxicillin (e.g. Mox, Augmentin)", 
   "Azithromycin (e.g. Azee, Zithromax)", 
@@ -8,7 +8,16 @@ const ANTIBIOTICS = [
   "Metronidazole (e.g. Flagyl)", 
   "Doxycycline / Tetracycline", 
   "Cephalosporin (e.g. Taxim, Ceftum)", 
+  "Paracetamol / Dolo / Calpol (Painkiller)",
+  "Ibuprofen / Combiflam (Painkiller)",
   "Other / Don't know"
+];
+
+const SOURCES = [
+  { id: 'Doctor', label: 'Medical Doctor', icon: 'stethoscope' },
+  { id: 'Pharmacist', label: 'Pharmacist (OTC)', icon: 'local_pharmacy' },
+  { id: 'Friend/Family', label: 'Friend or Family', icon: 'group' },
+  { id: 'Self/Online', label: 'Self / Online Search', icon: 'search' }
 ];
 
 const YesNoCard = ({ label, description, value, onChange }) => (
@@ -57,9 +66,9 @@ export default function Questionnaire({ onSubmit, loading }) {
   const [data, setData] = useState({
     age: '',
     symptoms: [],
-    doctor_consulted: null,
+    suggestion_source: '',
     antibiotic_prescribed: '',
-    self_medicated: null,
+    dosage: '',
     days_prescribed: '',
     days_completed: '',
     doses_skipped: null,
@@ -80,21 +89,16 @@ export default function Questionnaire({ onSubmit, loading }) {
   const steps = useMemo(() => {
     const s = [];
     s.push({ id: 'symptoms', label: 'Patient Symptoms' });
-    s.push({ id: 'doctor', label: 'Clinical Consultation' });
+    s.push({ id: 'source', label: 'Recommendation Source' });
 
-    if (data.doctor_consulted === false) {
-      s.push({ id: 'self_med', label: 'Self-Medication History' });
-    }
-
-    const tookAntibiotics = data.doctor_consulted === true || data.self_medicated === true;
-    if (tookAntibiotics) {
+    if (data.suggestion_source !== '') {
       s.push({ id: 'course', label: 'Treatment Course' });
       s.push({ id: 'doses', label: 'Dose Adherence' });
     }
 
     s.push({ id: 'history', label: 'Prior Usage History' });
     return s;
-  }, [data.doctor_consulted, data.self_medicated]);
+  }, [data.suggestion_source]);
 
   const [stepIdx, setStepIdx] = useState(0);
   const currentStep = steps[stepIdx] || steps[0];
@@ -116,8 +120,6 @@ export default function Questionnaire({ onSubmit, loading }) {
     onSubmit({
       ...data,
       age: parseInt(data.age, 10),
-      doctor_consulted: data.doctor_consulted === true,
-      self_medicated: data.self_medicated === true,
       doses_skipped: data.doses_skipped === true,
       prior_use_6mo: data.prior_use_6mo === true,
       shared_antibiotics: data.shared_antibiotics === true,
@@ -129,8 +131,7 @@ export default function Questionnaire({ onSubmit, loading }) {
   const canProceed = () => {
     switch (currentStep.id) {
       case 'symptoms': return data.age > 0 && data.symptoms.length > 0;
-      case 'doctor': return data.doctor_consulted !== null;
-      case 'self_med': return data.self_medicated !== null;
+      case 'source': return data.suggestion_source !== '' && (data.antibiotic_prescribed === '' || data.dosage !== '');
       case 'course': return true;
       case 'doses': return data.doses_skipped !== null;
       case 'history': return data.prior_use_6mo !== null && data.shared_antibiotics !== null;
@@ -139,14 +140,14 @@ export default function Questionnaire({ onSubmit, loading }) {
   };
 
   const getSkipNote = () => {
-    if (currentStep.id === 'history' && data.doctor_consulted === true && data.self_medicated !== true) {
-      return "✅ Consultation verified. Bypassing self-medication checks.";
+    if (currentStep.id === 'history' && data.suggestion_source === 'Doctor') {
+      return "✅ Consultation verified. Proceeding to medical history.";
     }
-    if (currentStep.id === 'course' && data.doctor_consulted === true) {
+    if (currentStep.id === 'course' && data.suggestion_source === 'Doctor') {
       return "📋 Prescription verified. Assessing course completion.";
     }
-    if (currentStep.id === 'self_med') {
-      return "⚠️ No consultation recorded. Assessing unprescribed usage.";
+    if (currentStep.id === 'course' && data.suggestion_source !== 'Doctor') {
+      return "⚠️ No doctor consultation recorded. Assessing unprescribed usage.";
     }
     return null;
   };
@@ -160,7 +161,7 @@ export default function Questionnaire({ onSubmit, loading }) {
         {/* Progress Indicator */}
         <div className="flex flex-col gap-sm">
           <div className="flex justify-between items-center text-label-sm font-label-sm text-on-surface-variant">
-            <span>Step {stepIdx + 1} of {totalSteps} {totalSteps < 6 && "(Adaptive)"}</span>
+            <span>Step {stepIdx + 1} of {totalSteps} {totalSteps < 5 && "(Adaptive)"}</span>
             <span>{currentStep.label}</span>
           </div>
           <div className="h-1 bg-surface-container-high rounded-full w-full overflow-hidden">
@@ -204,6 +205,18 @@ export default function Questionnaire({ onSubmit, loading }) {
                   <div className="flex flex-wrap gap-sm">
                     {SYMPTOMS.map(sym => {
                       const isSelected = data.symptoms.includes(sym);
+                      let styleClass = isSelected 
+                        ? 'bg-primary border-primary text-on-primary' 
+                        : 'bg-surface-container-lowest border-outline-variant text-on-surface-variant hover:bg-surface-container-low hover:border-outline';
+                      
+                      // Highlight red flag symptoms subtly
+                      const isRedFlag = ["High persistent fever", "Confusion", "Breathlessness", "Severe abdominal pain"].includes(sym);
+                      if (isRedFlag && !isSelected) {
+                        styleClass = 'bg-error-container/20 border-error/40 text-error hover:bg-error-container/50';
+                      } else if (isRedFlag && isSelected) {
+                        styleClass = 'bg-error text-on-error border-error';
+                      }
+
                       return (
                         <label key={sym} className="cursor-pointer">
                           <input 
@@ -212,11 +225,7 @@ export default function Questionnaire({ onSubmit, loading }) {
                             checked={isSelected}
                             onChange={() => toggleSymptom(sym)}
                           />
-                          <div className={`text-label-md font-label-md px-4 py-2 rounded-full border transition-all duration-200 ${
-                            isSelected 
-                              ? 'bg-primary border-primary text-on-primary' 
-                              : 'bg-surface-container-lowest border-outline-variant text-on-surface-variant hover:bg-surface-container-low hover:border-outline'
-                          }`}>
+                          <div className={`text-label-md font-label-md px-4 py-2 rounded-full border transition-all duration-200 ${styleClass}`}>
                             {sym}
                           </div>
                         </label>
@@ -227,40 +236,65 @@ export default function Questionnaire({ onSubmit, loading }) {
               </div>
             )}
 
-            {/* DOCTOR */}
-            {currentStep.id === 'doctor' && (
+            {/* SOURCE OF RECOMMENDATION */}
+            {currentStep.id === 'source' && (
               <div className="flex flex-col gap-md">
-                <YesNoCard
-                  label="Was a medical professional consulted prior to antibiotic use?"
-                  description="Clinical guidance is essential to distinguish between viral and bacterial etiologies."
-                  value={data.doctor_consulted}
-                  onChange={(v) => update({ doctor_consulted: v, antibiotic_prescribed: '' })}
-                />
+                <h1 className="text-headline-sm md:text-headline-md font-headline-sm md:font-headline-md text-on-surface">Who suggested the antibiotic?</h1>
+                <div className="bg-surface-container-low p-md rounded flex gap-md items-start border border-outline-variant/50 mt-xs">
+                  <span className="material-symbols-outlined text-on-surface-variant mt-0.5">info</span>
+                  <p className="text-body-sm font-body-sm text-on-surface-variant">Your source of recommendation greatly affects clinical safety and AMR risks.</p>
+                </div>
 
-                {data.doctor_consulted === true && (
-                  <div className="mt-6 animate-fade-in">
-                    <label className="block text-label-md font-label-md text-on-surface mb-xs">Prescribed Antibiotic Class/Agent</label>
-                    <select 
-                      value={data.antibiotic_prescribed}
-                      onChange={e => update({ antibiotic_prescribed: e.target.value })}
-                      className="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-body-md font-body-md"
-                    >
-                      <option value="" disabled>Select an option</option>
-                      {ANTIBIOTICS.map(a => <option key={a} value={a}>{a}</option>)}
-                    </select>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-md mt-sm">
+                  {SOURCES.map(src => (
+                    <label key={src.id} className="cursor-pointer relative group">
+                      <input 
+                        className="peer sr-only" 
+                        name="source" 
+                        type="radio" 
+                        checked={data.suggestion_source === src.id}
+                        onChange={() => update({ suggestion_source: src.id, antibiotic_prescribed: '' })}
+                      />
+                      <div className="w-full h-full p-md border border-outline-variant rounded bg-surface-container-lowest flex items-center gap-sm transition-all duration-200 peer-checked:border-primary peer-checked:border-2 peer-checked:bg-surface-container-low hover:border-outline">
+                        <span className="material-symbols-outlined text-on-surface-variant group-hover:text-on-surface peer-checked:text-primary transition-colors">
+                          {src.icon}
+                        </span>
+                        <span className="text-label-md font-label-md text-on-surface-variant group-hover:text-on-surface peer-checked:text-primary peer-checked:font-bold transition-all">
+                          {src.label}
+                        </span>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+
+                {data.suggestion_source !== '' && (
+                  <div className="mt-6 animate-fade-in flex flex-col gap-md">
+                    <div>
+                      <label className="block text-label-md font-label-md text-on-surface mb-xs">Drug / Medication Used</label>
+                      <select 
+                        value={data.antibiotic_prescribed}
+                        onChange={e => update({ antibiotic_prescribed: e.target.value })}
+                        className="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-body-md font-body-md"
+                      >
+                        <option value="" disabled>Select an option</option>
+                        {ANTIBIOTICS.map(a => <option key={a} value={a}>{a}</option>)}
+                      </select>
+                    </div>
+                    {data.antibiotic_prescribed !== '' && (
+                      <div className="animate-fade-in">
+                        <label className="block text-label-md font-label-md text-on-surface mb-xs">Dosage (e.g., 500mg, 650mg)</label>
+                        <input 
+                          type="text"
+                          value={data.dosage}
+                          onChange={e => update({ dosage: e.target.value })}
+                          className="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-body-md font-body-md"
+                          placeholder="Enter dosage amount (required)"
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
-            )}
-
-            {/* SELF-MED */}
-            {currentStep.id === 'self_med' && (
-              <YesNoCard
-                label="Did you consume antibiotics without a formal prescription (e.g., leftover medication)?"
-                description="Self-medication often results in inappropriate spectrum coverage and sub-therapeutic dosing."
-                value={data.self_medicated}
-                onChange={(v) => update({ self_medicated: v })}
-              />
             )}
 
             {/* COURSE */}
@@ -275,7 +309,7 @@ export default function Questionnaire({ onSubmit, loading }) {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-md mt-sm">
                   <div>
-                    <label className="block text-label-md font-label-md text-on-surface mb-xs">Days Prescribed</label>
+                    <label className="block text-label-md font-label-md text-on-surface mb-xs">Days Planned/Prescribed</label>
                     <input 
                       type="number" min="0"
                       value={data.days_prescribed}

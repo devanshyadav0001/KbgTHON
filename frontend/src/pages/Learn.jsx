@@ -2,14 +2,24 @@ import React from 'react';
 
 const MYTH_FACTS = [
   {
-    myth: "Antibiotics are effective against viral infections like the common cold.",
-    fact: "Antibiotics selectively target bacterial structures and mechanisms (e.g., cell wall synthesis, protein translation). They possess no efficacy against viral pathogens. Inappropriate prescribing for viral URIs is a primary driver of resistance.",
-    source: "Citation: Smith et al., Journal of Antimicrobial Chemotherapy, 2021."
+    myth: "Antibiotics cure viral fevers and colds.",
+    fact: "Antibiotics only treat bacterial infections; using them for viral illnesses doesn't help and drives resistance.",
+    source: "Based on: WHO AMR Fact Sheet & Guidelines"
   },
   {
-    myth: "The patient's body develops resistance to the antibiotics.",
-    fact: "It is the bacteria, not the human host, that mutate or acquire resistance genes (via horizontal gene transfer) enabling them to survive antimicrobial exposure. These resistant strains then proliferate and transmit.",
-    source: "Citation: Davis & Brown, Clinical Infectious Diseases, 2020."
+    myth: "Stronger/broad-spectrum antibiotics are always better.",
+    fact: "Guidelines recommend the narrowest effective antibiotic for the shortest duration; broad-spectrum misuse accelerates resistance.",
+    source: "Based on: ICMR Treatment Guidelines for Antimicrobial Use"
+  },
+  {
+    myth: "Stopping the antibiotic when I feel better is fine.",
+    fact: "Not completing the prescribed course increases the risk of treatment failure and contributes heavily to antimicrobial resistance.",
+    source: "Based on: CDC Antibiotic Use and Antimicrobial Resistance Facts"
+  },
+  {
+    myth: "Everyone keeps antibiotics at home for emergencies.",
+    fact: "Self-medication and OTC use without a prescription is a major driver of AMR, widely documented in Indian behavioral studies.",
+    source: "Based on: Evidence-based Indian AMR behavioral research"
   }
 ];
 

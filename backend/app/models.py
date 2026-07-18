@@ -5,11 +5,12 @@ class QuestionnaireInput(BaseModel):
     age: int
     symptoms: List[str]
     doctor_consulted: bool
+    suggestion_source: Optional[str] = None
     antibiotic_prescribed: Optional[str] = None
+    dosage: Optional[str] = None
     days_prescribed: Optional[int] = None
     days_completed: Optional[int] = None
     doses_skipped: bool
-    self_medicated: bool
     prior_use_6mo: bool
     shared_antibiotics: bool = False
 
@@ -24,12 +25,15 @@ class RiskResult(BaseModel):
     category: str
     reasons: List[RiskReason]
     session_id: str
+    red_flags: bool = False
 
 class ExplanationRequest(BaseModel):
     score: float
     category: str
     reasons: List[RiskReason]
     snippets: Dict[str, str]
+    drug_name: Optional[str] = None
+    dosage: Optional[str] = None
 
 class ExplanationResponse(BaseModel):
     explanation: str

@@ -47,7 +47,9 @@ async def explain_risk(request: ExplanationRequest):
         score=request.score,
         category=request.category,
         reasons=request.reasons,
-        snippets=request.snippets
+        snippets=request.snippets,
+        drug_name=request.drug_name,
+        dosage=request.dosage
     )
 
 @app.get("/health")

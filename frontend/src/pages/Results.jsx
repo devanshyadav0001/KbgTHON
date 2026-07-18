@@ -20,6 +20,9 @@ export default function Results() {
       return;
     }
     
+    // Do not fetch AI explanation if it's an emergency red flag
+    if (assessData.red_flags) return;
+
     if (!explainData && !loadingExplain) {
       const fetchExplain = async () => {
         setLoadingExplain(true);
@@ -54,7 +57,9 @@ export default function Results() {
               weight: r.weight,
               guideline_ref: r.guideline_ref
             })),
-            snippets: snippetsMap
+            snippets: snippetsMap,
+            drug_name: assessData.antibiotic_prescribed,
+            dosage: assessData.dosage
           };
           const data = await getExplanation(payload);
           setExplainData(data);
@@ -92,16 +97,33 @@ export default function Results() {
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
-        {/* Left Column: Gauge & Analysis (Wider) */}
-        <div className="lg:col-span-7 flex flex-col gap-gutter">
-          <RiskResult data={assessData} variant="gaugeOnly" />
-          <Explanation explanation={explainData} loading={!explainData && loadingExplain} />
-        </div>
+        {assessData.red_flags ? (
+          <div className="col-span-1 lg:col-span-12 py-3xl">
+            <div className="bg-error-container border border-error rounded-xl p-2xl flex flex-col items-center justify-center text-center gap-md shadow-sm">
+              <span className="material-symbols-outlined text-error" style={{fontVariationSettings: "'FILL' 1", fontSize: '64px'}}>emergency</span>
+              <h2 className="text-display-lg font-display-lg text-on-error-container">Urgent Medical Attention Required</h2>
+              <p className="text-headline-sm font-headline-sm text-on-error-container max-w-2xl mt-sm">
+                You reported symptoms such as high persistent fever, confusion, breathlessness, or severe abdominal pain. This may be serious.
+              </p>
+              <p className="text-body-lg font-body-lg text-error font-bold mt-md bg-error-container border border-error px-md py-sm rounded">
+                Please consult a doctor or visit the nearest emergency facility immediately. This tool is not a diagnostic or prescription tool.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Left Column: Gauge & Analysis (Wider) */}
+            <div className="lg:col-span-7 flex flex-col gap-gutter">
+              <RiskResult data={assessData} variant="gaugeOnly" />
+              <Explanation explanation={explainData} loading={!explainData && loadingExplain} />
+            </div>
 
-        {/* Right Column: Risk Factors List (Narrower) */}
-        <div className="lg:col-span-5 flex flex-col">
-          <RiskResult data={assessData} variant="factorsOnly" />
-        </div>
+            {/* Right Column: Risk Factors List (Narrower) */}
+            <div className="lg:col-span-5 flex flex-col">
+              <RiskResult data={assessData} variant="factorsOnly" />
+            </div>
+          </>
+        )}
       </div>
       
       {/* Disclaimer Banner below main grid */}

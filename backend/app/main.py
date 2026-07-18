@@ -1,73 +1,43 @@
-import json
-import os
-from pathlib import Path
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
+from app.models import QuestionnaireInput, RiskResult
+from app.risk_engine import evaluate
 
-from .models import QuestionnaireInput, RiskResult, GuidelineSnippet, ExplanationRequest, ExplanationResponse
-from . import risk_engine
-from . import session_store
-from .llm_explain import generate_explanation
+from app.schemas import ChatRequest, ChatResponse, Source
+from app.rag.retriever import retrieve
+from app.rag.generator import generate_answer
 
-# Chatbot imports
-from .schemas import ChatRequest, ChatResponse, Source
-from .rag.retriever import retrieve
-from .rag.generator import generate_answer
 
-env_path = Path(__file__).parent.parent.parent / '.env'
-load_dotenv(dotenv_path=env_path)
+app = FastAPI(title="AMR Guardian API")
 
-app = FastAPI(title="AMR Awareness API")
-
+# Allow React frontend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:5173", 
-        "https://kbg-thon.vercel.app", 
-        "https://kbg-thon-tmja.vercel.app",
-        "*" # Added for easier testing across Vercel deployments, remove in strict production
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "*"
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-GUIDELINES_PATH = Path(__file__).parent / 'config' / 'guidelines.json'
-with open(GUIDELINES_PATH, 'r', encoding='utf-8') as f:
-    GUIDELINES = json.load(f)
 
-@app.post("/assess", response_model=RiskResult)
-def assess_risk(input_data: QuestionnaireInput):
-    result = risk_engine.evaluate(input_data)
-    rule_ids = [r.rule_id for r in result.reasons]
-    session_store.create_session(result.session_id, result.score, result.category, rule_ids)
-    return result
+@app.get("/")
+def home():
+    return {"message": "AMR Guardian Backend Running 🚀"}
 
-@app.get("/guideline/{ref_id}", response_model=GuidelineSnippet)
-def get_guideline(ref_id: str):
-    if ref_id not in GUIDELINES:
-        raise HTTPException(status_code=404, detail="Guideline not found")
-    data = GUIDELINES[ref_id]
-    return GuidelineSnippet(title=data["title"], snippet=data["snippet"], source=data["source"])
-
-@app.post("/explain", response_model=ExplanationResponse)
-async def explain_risk(request: ExplanationRequest):
-    return await generate_explanation(
-        score=request.score,
-        category=request.category,
-        reasons=request.reasons,
-        snippets=request.snippets,
-        medications=request.medications,
-        gender=request.gender,
-        recent_test_results=request.recent_test_results
-    )
 
 @app.post("/chat", response_model=ChatResponse)
 def chat(request: ChatRequest):
+
     docs, metadata = retrieve(request.message)
+
     answer = generate_answer(request.message, docs)
+
     sources = []
+
     for item in metadata:
         sources.append(
             Source(
@@ -75,11 +45,13 @@ def chat(request: ChatRequest):
                 page=item["page"] + 1
             )
         )
+
     return ChatResponse(
         answer=answer,
         sources=sources
     )
 
-@app.get("/health")
-def health_check():
-    return {"status": "ok"}
+
+@app.post("/assess", response_model=RiskResult)
+def assess(request: QuestionnaireInput):
+    return evaluate(request)

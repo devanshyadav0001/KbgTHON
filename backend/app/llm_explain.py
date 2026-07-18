@@ -123,13 +123,13 @@ Return ONLY a single JSON object with this exact shape:
 }
 """
 
-STATIC_FALLBACK = '{"headline": "Risk Analysis Unavailable", "personalized_summary": "Based on the assessment, your usage patterns may contribute to antimicrobial resistance risk or other health risks. Please consult a registered medical practitioner for personalized guidance.", "behaviour_change_tips": [], "risk_vectors": [], "score_breakdown": {"components": []}}'
+STATIC_FALLBACK = '{"misuse_risk_score": 50, "misuse_risk_band": "Medium", "headline": "Risk Analysis Unavailable", "personalized_summary": "Based on the assessment, your usage patterns may contribute to antimicrobial resistance risk or other health risks. Please consult a registered medical practitioner for personalized guidance.", "score_breakdown": {"total_formula": "Offline Mode", "components": [{"label": "Offline Analysis", "points": 5, "reason": "AI service is currently unavailable. Displaying default medium risk."}]}, "risk_vectors": [], "behaviour_change_tips": ["Always consult a doctor before starting antibiotics.", "Never use leftover antibiotics."]}'
 DISCLAIMER = "This application is not a diagnostic tool. It cannot identify bacterial infection or prescribe treatment. Always consult a registered medical practitioner."
 
 MAX_RETRIES = 3
 RETRY_DELAY_SECONDS = 5
 
-def _make_openrouter_request(api_key, system_prompt):
+def _make_openrouter_request(api_key, system_prompt, model):
     """Synchronous request to OpenRouter API"""
     headers = {
         "Authorization": f"Bearer {api_key}",
@@ -139,7 +139,7 @@ def _make_openrouter_request(api_key, system_prompt):
     }
     
     payload = {
-        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        "model": model,
         "response_format": { "type": "json_object" },
         "messages": [
             {"role": "system", "content": system_prompt}
@@ -158,23 +158,29 @@ def _make_openrouter_request(api_key, system_prompt):
 
 
 async def _call_llm(api_key, system_prompt):
-    """Call OpenRouter API with automatic retry on 429 rate-limit errors."""
-    for attempt in range(MAX_RETRIES):
-        try:
-            response_text = await asyncio.to_thread(_make_openrouter_request, api_key, system_prompt)
-            return response_text
-        except requests.exceptions.HTTPError as e:
-            if e.response.status_code == 429:
-                if attempt < MAX_RETRIES - 1:
-                    wait_time = RETRY_DELAY_SECONDS * (attempt + 1)
-                    await asyncio.sleep(wait_time)
+    """Call OpenRouter API with automatic retry and model fallback."""
+    models = [
+        "meta-llama/llama-3.3-70b-instruct:free",
+        "google/gemini-2.0-flash-lite-preview-02-05:free",
+        "mistralai/mistral-7b-instruct:free"
+    ]
+    
+    for model in models:
+        for attempt in range(2): # 2 attempts per model
+            try:
+                print(f"Trying model: {model}, attempt {attempt+1}")
+                response_text = await asyncio.to_thread(_make_openrouter_request, api_key, system_prompt, model)
+                return response_text
+            except requests.exceptions.HTTPError as e:
+                print(f"OpenRouter HTTP Error on {model}: {e.response.status_code} - {e.response.text}")
+                if e.response.status_code == 429:
+                    await asyncio.sleep(RETRY_DELAY_SECONDS)
                     continue
                 else:
-                    return None
-            else:
-                return None
-        except Exception as e:
-            return None
+                    break # Break attempt loop, try next model
+            except Exception as e:
+                print(f"OpenRouter Request Error on {model}: {e}")
+                break # Break attempt loop, try next model
     return None
 
 

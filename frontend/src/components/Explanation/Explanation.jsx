@@ -46,7 +46,7 @@ export default function Explanation({ explanation, loading, riskScore }) {
   const generatedBy = aiMeta?.generated_by || "Rule engine + clinical knowledge base";
 
   return (
-    <section className="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm h-full flex flex-col relative overflow-hidden animate-fade-in mt-xl print:shadow-none print:border-none print:p-0 print:mt-md">
+    <section className="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm h-full flex flex-col relative overflow-hidden animate-fade-in print:shadow-none print:border-none print:p-0 print:mt-md">
       <div className="flex items-center justify-between border-b border-outline-variant pb-sm mb-md">
         <h2 className="text-headline-sm font-headline-sm text-primary flex items-center gap-xs">
           <span className="material-symbols-outlined text-secondary" style={{fontVariationSettings: "'FILL' 1"}}>neurology</span>

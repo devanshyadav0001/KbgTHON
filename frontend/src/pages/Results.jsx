@@ -97,7 +97,7 @@ export default function Results() {
         )}
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-stretch">
         {assessData.red_flags ? (
           <div className="col-span-1 lg:col-span-12 py-3xl">
             <div className="bg-error-container border border-error rounded-xl p-2xl flex flex-col items-center justify-center text-center gap-md shadow-sm">
@@ -113,16 +113,20 @@ export default function Results() {
           </div>
         ) : (
           <>
-            {/* Left Column: Gauge & Analysis (Wider) */}
-            <div className="lg:col-span-7 flex flex-col gap-gutter">
+            {/* Top Row: Gauge & Analysis side-by-side */}
+            <div className="lg:col-span-4 flex flex-col gap-gutter">
               <RiskResult data={assessData} variant="gaugeOnly" />
+            </div>
+            <div className="lg:col-span-8 flex flex-col gap-gutter">
               <Explanation explanation={explainData} loading={!explainData && loadingExplain} riskScore={assessData.score} />
             </div>
 
-            {/* Right Column: Risk Factors List (Narrower) */}
-            <div className="lg:col-span-5 flex flex-col gap-gutter">
+            {/* Bottom Row: Risk Factors List & Chart side-by-side */}
+            <div className="lg:col-span-7 flex flex-col gap-gutter">
               <RiskResult data={assessData} variant="factorsOnly" />
-              <div className="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm p-lg">
+            </div>
+            <div className="lg:col-span-5 flex flex-col gap-gutter">
+              <div className="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm p-lg h-full">
                 <RiskChart currentScore={assessData.score} />
               </div>
             </div>

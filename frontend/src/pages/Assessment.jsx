@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Questionnaire from '../components/Questionnaire/Questionnaire';
 import { useAssessment } from '../hooks/useAssessment';
+import AnalysisProgress from '../components/Questionnaire/AnalysisProgress';
 
 export default function Assessment() {
   const navigate = useNavigate();
@@ -10,8 +11,10 @@ export default function Assessment() {
   const handleAssessmentSubmit = async (data) => {
     try {
       const results = await submit(data);
-      // results contains assessData and explainData
-      navigate('/results', { state: results });
+      // Let the animation finish before navigating if it's too fast
+      setTimeout(() => {
+        navigate('/results', { state: results });
+      }, 4500); // 1.5s per step * 3 steps
     } catch (err) {
       console.error(err);
     }
@@ -29,6 +32,8 @@ export default function Assessment() {
           </div>
         </div>
       )}
+
+      {loading && <AnalysisProgress />}
 
       <Questionnaire onSubmit={handleAssessmentSubmit} loading={loading} />
     </div>

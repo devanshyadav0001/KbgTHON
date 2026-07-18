@@ -13,6 +13,11 @@ class QuestionnaireInput(BaseModel):
     doses_skipped: bool
     prior_use_6mo: bool
     shared_antibiotics: bool = False
+    symptom_duration: Optional[str] = None
+    diagnostic_test: Optional[bool] = None
+    kept_leftovers: Optional[bool] = None
+    pregnancy: Optional[bool] = None
+    chronic_disease: Optional[bool] = None
 
 class RiskReason(BaseModel):
     rule_id: str

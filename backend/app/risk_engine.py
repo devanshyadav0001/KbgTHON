@@ -50,6 +50,19 @@ def evaluate(input_data: QuestionnaireInput) -> RiskResult:
             triggered = input_data.antibiotic_prescribed and "Painkiller" in input_data.antibiotic_prescribed
         elif rule['id'] == 'RULE-10':
             triggered = input_data.age < 15 and is_high_dose(input_data.dosage)
+        elif rule['id'] == 'RULE-11':
+            triggered = input_data.diagnostic_test == False and input_data.suggestion_source != 'Doctor'
+        elif rule['id'] == 'RULE-12':
+            triggered = input_data.kept_leftovers == True
+        elif rule['id'] == 'RULE-13':
+            viral_set = {'cold', 'cough', 'sore throat', 'runny nose', 'body ache', 'fever', 'dengue-like fever'}
+            triggered = input_data.symptom_duration == 'Less than 3 days' and symptoms_lower.issubset(viral_set) and len(symptoms_lower) > 0
+        elif rule['id'] == 'RULE-14':
+            triggered = input_data.age > 65
+        elif rule['id'] == 'RULE-15':
+            triggered = input_data.pregnancy == True
+        elif rule['id'] == 'RULE-16':
+            triggered = input_data.chronic_disease == True
             
         if triggered:
             raw_sum += rule['weight']

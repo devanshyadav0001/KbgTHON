@@ -43,5 +43,35 @@
     "title": "Age-Appropriate Dosing",
     "snippet": "Medication dosage must be carefully adjusted for children. Giving adult dosages (like 500mg or 650mg) to young children can cause severe toxicity and is a hallmark of unsafe self-medication practices.",
     "source": "Pediatric Safety Guidelines"
+  },
+  "GDL-10": {
+    "title": "Diagnostic Testing Prior to Prescribing",
+    "snippet": "Antibiotics should ideally be prescribed following clinical evaluation and appropriate diagnostic testing (e.g., blood tests, cultures, swabs) to ensure the infection is bacterial and susceptible to the drug.",
+    "source": "WHO AMR Action Plan"
+  },
+  "GDL-11": {
+    "title": "Do Not Keep Leftover Antibiotics",
+    "snippet": "Keeping leftover antibiotics encourages future self-medication and inappropriate use for unrelated illnesses. Unused antibiotics should be safely discarded.",
+    "source": "CDC 'Be Antibiotics Aware'"
+  },
+  "GDL-12": {
+    "title": "Self-Limiting Short-Duration Symptoms",
+    "snippet": "Many acute respiratory infections are viral and self-limiting, often peaking within 3-5 days. Immediate antibiotic use without waiting to see if symptoms resolve naturally is a primary driver of resistance.",
+    "source": "National Guidelines for Rational Antibiotic Use"
+  },
+  "GDL-13": {
+    "title": "Geriatric Vulnerability",
+    "snippet": "Patients over 65 have higher susceptibility to adverse antibiotic events, including C. difficile infections and drug toxicity due to altered pharmacokinetics.",
+    "source": "Clinical Guidelines for Older Adults"
+  },
+  "GDL-14": {
+    "title": "Pregnancy Safety",
+    "snippet": "Many antibiotics cross the placenta and can have teratogenic effects. Antibiotic use during pregnancy requires strict specialist evaluation to balance maternal health and fetal safety.",
+    "source": "Obstetric Antimicrobial Guidelines"
+  },
+  "GDL-15": {
+    "title": "Chronic Disease Complications",
+    "snippet": "Pre-existing conditions (e.g., diabetes, asthma) compromise immune response. Inappropriate antibiotic use in these populations can rapidly lead to severe, difficult-to-treat opportunistic infections.",
+    "source": "ICMR Guidelines on Comorbidities"
   }
 }

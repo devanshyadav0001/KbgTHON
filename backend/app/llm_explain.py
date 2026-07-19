@@ -5,16 +5,16 @@ from dotenv import load_dotenv
 from .models import ExplanationResponse
 from .safety_filter import filter_output
 
-SYSTEM_PROMPT = """You generate a short, plain-language explanation of antimicrobial resistance risk for a general audience.
+SYSTEM_PROMPT = """You generate a highly detailed, comprehensive clinical explanation of antimicrobial resistance risk for a general audience.
 You will be given: a risk score, a list of triggered risk reasons, and a paraphrased public-health guideline snippet for each reason.
 Rules:
-- Under 100 words.
+- Write a detailed response spanning at least 3 to 4 paragraphs. Be comprehensive and educational.
 - Explicitly mention *what the user actually did* based on the triggered risk reasons (e.g., "You used antibiotics without consulting a doctor..."). Do not use generic boilerplate like "Based on your assessment...".
+- Deeply explain the biological mechanism of resistance (e.g., mutation, selective pressure, survival advantage, horizontal gene transfer). Explain *exactly how* the user's specific actions give bacteria a survival advantage.
 - Do not diagnose any illness as bacterial or viral.
 - Do not name or suggest any antibiotic, drug, or dosage.
 - Do not give any treatment instruction.
-- Always end with: "Please consult a registered medical practitioner."
-- Explain the biological mechanism of resistance (e.g., mutation, selective pressure, survival advantage) based on the provided guideline snippet. Do not just state that it causes resistance; explain *how* biologically."""
+- Always end with: "Please consult a registered medical practitioner." """
 
 STRICTER_FALLBACK_PROMPT = SYSTEM_PROMPT + "\nCRITICAL: You must not mention any medication name, dosage, or diagnostic statement under any circumstances. Respond ONLY about behavioral risk factors."
 
@@ -32,7 +32,7 @@ async def _call_gemini(api_key, user_prompt, system_prompt):
     for attempt in range(MAX_RETRIES):
         try:
             response = client.models.generate_content(
-                model='gemini-2.0-flash-lite',
+                model='gemini-2.5-flash',
                 contents=user_prompt,
                 config=genai.types.GenerateContentConfig(
                     system_instruction=system_prompt,

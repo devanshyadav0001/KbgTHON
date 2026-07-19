@@ -7,52 +7,47 @@ export default function Layout({ children }) {
 
   return (
     <>
-      {/* Floating Pill Navbar Wrapper */}
-      <div className="fixed top-2 left-0 right-0 z-50 flex justify-center px-margin-mobile pointer-events-none">
-        <nav className="pointer-events-auto bg-surface/90 backdrop-blur-md text-on-surface rounded-full flex items-center justify-between px-2 py-2 shadow-sm border border-outline-variant/30 w-auto gap-8 transition-all hover:shadow-md">
+      {/* Editorial Navbar */}
+      <header className="sticky top-0 z-50 w-full bg-[#f4f6ee] border-b border-[#c9c6b4]/50">
+        <nav className="w-full max-w-[1440px] mx-auto px-4 md:px-8 xl:px-12 h-16 flex items-center justify-between">
             
             {/* Logo / Brand */}
-            <NavLink to="/" className="group flex items-center gap-2 bg-primary/10 rounded-full pr-4 pl-1 py-1 cursor-pointer hover:bg-primary/20 transition-colors" title="Go to Home">
-              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-sm relative overflow-hidden">
-                <span className="material-symbols-outlined text-on-primary text-lg select-none animate-spin-slow group-hover:scale-110 transition-transform duration-300" style={{fontVariationSettings: "'FILL' 0", animationDuration: '8s'}}>public</span>
-                <div className="absolute inset-0 bg-primary/30 animate-ping rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              </div>
-              <span className="text-sm font-bold text-primary tracking-tight">AMR Guard</span>
+            <NavLink to="/" className="group flex items-center gap-2 cursor-pointer transition-colors" title="Go to Home">
+              <span className="material-symbols-outlined text-primary text-xl group-hover:scale-110 transition-transform duration-300" style={{fontVariationSettings: "'FILL' 1"}}>medication</span>
+              <span className="font-mono text-sm tracking-[0.14em] font-bold uppercase text-on-surface">Rx-AMR</span>
             </NavLink>
             
             {/* Links */}
-            <div className="hidden md:flex items-center gap-6">
+            <div className="hidden md:flex items-center gap-8">
               {[
-                { path: '/', label: 'Home', icon: 'home' },
-                { path: '/learn', label: 'Learn', icon: 'menu_book' },
-                { path: '/quiz', label: 'Quiz', icon: 'quiz' },
-                { path: '/emergency', label: 'Helpline', icon: 'support_agent' }
+                { path: '/', label: 'HOME' },
+                { path: '/learn', label: 'LEARN' },
+                { path: '/quiz', label: 'QUIZ' },
+                { path: '/emergency', label: 'HELPLINE' }
               ].map(item => (
                 <NavLink 
                   key={item.label}
                   to={item.path} 
                   className={({isActive}) => `
-                    font-medium transition-colors hover:text-primary flex items-center justify-center gap-1.5 text-sm
+                    font-mono text-[11px] tracking-[0.14em] transition-colors hover:text-primary 
                     ${isActive && item.path !== '/' ? 'text-primary font-bold' : 'text-on-surface-variant'}
                   `}
                 >
-                  <span className="material-symbols-outlined text-[18px]" style={{fontVariationSettings: "'FILL' 0"}}>{item.icon}</span>
                   {item.label}
                 </NavLink>
               ))}
             </div>
 
             {/* Action Button */}
-            <NavLink to="/assessment" className="bg-primary text-on-primary px-6 py-2 rounded-full font-bold text-sm hover:bg-primary/90 transition-all shadow-sm hover:shadow cursor-pointer shrink-0 ml-2">
+            <NavLink to="/assessment" className="bg-[#182420] text-[#eff1e7] px-5 py-2 rounded-sm font-mono text-[11px] tracking-[0.1em] uppercase hover:bg-[#182420]/90 transition-all cursor-pointer shrink-0 ml-2">
               Start Check
             </NavLink>
           </nav>
-        </div>
+        </header>
 
       {!isLanding && (
         <>
-          {/* Spacer to push content down since navbar is fixed */}
-          <div className="h-24 w-full"></div>
+          {/* Spacer removed as header is now sticky */}
 
           {/* Global Warning Banner */}
           <div className="w-full px-4 md:px-8 xl:px-12 mx-auto mb-4">

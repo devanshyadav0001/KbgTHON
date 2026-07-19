@@ -32,7 +32,7 @@ async def _call_gemini(api_key, user_prompt, system_prompt):
     for attempt in range(MAX_RETRIES):
         try:
             response = client.models.generate_content(
-                model='gemini-2.5-flash',
+                model='gemini-2.0-flash-lite',
                 contents=user_prompt,
                 config=genai.types.GenerateContentConfig(
                     system_instruction=system_prompt,

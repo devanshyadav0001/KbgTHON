@@ -87,13 +87,11 @@ export default function Results() {
         </div>
         
         {isHigh && (
-          <div className="bg-error/10 border border-error/20 rounded-[2rem] p-1.5 flex items-start gap-md mt-sm shadow-sm animate-fade-up">
-            <div className="bg-surface-container-lowest rounded-[calc(2rem-6px)] w-full flex items-start gap-md p-6 shadow-ambient border border-error/10">
-              <span className="material-symbols-outlined text-error mt-xs" style={{fontVariationSettings: "'FILL' 1"}}>warning</span>
-              <div>
-                <h3 className="text-headline-sm font-headline-sm text-on-surface">High Risk Profile Identified</h3>
-                <p className="text-body-sm font-body-sm text-on-surface-variant mt-xs">Patient demonstrates significant behavioral and historical markers indicating elevated risk for developing or harboring antimicrobial-resistant infections. Immediate clinical review recommended prior to prescribing broad-spectrum antibiotics.</p>
-              </div>
+          <div className="bg-error-container border border-error rounded-lg p-md flex items-start gap-md mt-sm shadow-sm">
+            <span className="material-symbols-outlined text-error mt-xs" style={{fontVariationSettings: "'FILL' 1"}}>warning</span>
+            <div>
+              <h3 className="text-headline-sm font-headline-sm text-on-error-container">High Risk Profile Identified</h3>
+              <p className="text-body-sm font-body-sm text-on-error-container mt-xs">Patient demonstrates significant behavioral and historical markers indicating elevated risk for developing or harboring antimicrobial-resistant infections. Immediate clinical review recommended prior to prescribing broad-spectrum antibiotics.</p>
             </div>
           </div>
         )}
@@ -140,22 +138,20 @@ export default function Results() {
       <Disclaimer riskCategory={assessData.category} />
 
       {/* Action Buttons */}
-      <div className="flex flex-col sm:flex-row justify-end items-center gap-4 mt-lg border-t border-outline-variant pt-lg">
+      <div className="flex flex-col sm:flex-row justify-end items-center gap-md mt-lg border-t border-outline-variant pt-lg">
         <button 
           onClick={() => navigate('/assessment')}
-          className="group px-8 py-3 rounded-full bg-surface-container-low border border-outline-variant text-on-surface font-bold text-base hover:bg-surface-container transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] ease-spring duration-500"
+          className="w-full sm:w-auto px-lg py-sm rounded border border-primary text-primary font-label-md text-label-md hover:bg-primary/10 transition-colors flex items-center justify-center gap-xs cursor-pointer active:scale-95"
         >
-          <span className="material-symbols-outlined group-hover:-rotate-90 transition-transform duration-500 ease-spring" style={{fontVariationSettings: "'FILL' 0"}}>refresh</span>
+          <span className="material-symbols-outlined" style={{fontVariationSettings: "'FILL' 0"}}>refresh</span>
           Restart Assessment
         </button>
         <button 
           onClick={() => navigate('/learn')}
-          className="group bg-primary text-on-primary pl-8 pr-2 py-2.5 rounded-full font-bold text-base hover:bg-primary/90 transition-all shadow-ambient cursor-pointer flex items-center gap-4 active:scale-[0.98] ease-spring duration-500"
+          className="w-full sm:w-auto px-lg py-sm rounded bg-primary text-on-primary font-label-md text-label-md hover:bg-primary/90 shadow-sm transition-colors flex items-center justify-center gap-xs cursor-pointer active:scale-95"
         >
+          <span className="material-symbols-outlined" style={{fontVariationSettings: "'FILL' 0"}}>school</span>
           Learn About AMR
-          <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center transition-transform duration-500 ease-spring group-hover:scale-105">
-            <span className="material-symbols-outlined text-base" style={{fontVariationSettings: "'FILL' 0"}}>school</span>
-          </div>
         </button>
       </div>
     </div>

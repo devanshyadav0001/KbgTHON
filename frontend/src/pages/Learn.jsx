@@ -145,6 +145,31 @@ export default function Learn() {
         </div>
       </section>
 
+      {/* The Biology of AMR */}
+      <section className="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm">
+        <div className="flex items-center gap-sm mb-md border-b border-outline-variant pb-sm">
+          <span className="material-symbols-outlined text-primary" style={{fontVariationSettings: "'FILL' 1"}}>science</span>
+          <h2 className="font-headline-sm text-headline-sm text-primary">The Biology of AMR: How Superbugs Evolve</h2>
+        </div>
+        <p className="font-body-md text-body-md text-on-surface mb-md">
+          Antimicrobial resistance is driven by fundamental biological principles. When exposed to antibiotics, bacteria face intense evolutionary pressure. Here is how they survive and become "superbugs."
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-md">
+          <div className="bg-surface p-md rounded border border-outline-variant/50">
+            <h4 className="font-label-md text-primary mb-xs">1. Natural Selection & Mutation</h4>
+            <p className="font-body-sm text-on-surface-variant">Random genetic mutations occasionally give a bacterium a survival advantage (e.g., modifying the antibiotic target). When antibiotics kill the susceptible majority, the resistant mutants survive and multiply.</p>
+          </div>
+          <div className="bg-surface p-md rounded border border-outline-variant/50">
+            <h4 className="font-label-md text-primary mb-xs">2. Horizontal Gene Transfer</h4>
+            <p className="font-body-sm text-on-surface-variant">Bacteria can swap DNA through conjugation, transformation, or transduction. They share resistance genes (like plasmids coding for degrading enzymes) with neighboring bacteria—even across different species.</p>
+          </div>
+          <div className="bg-surface p-md rounded border border-outline-variant/50">
+            <h4 className="font-label-md text-primary mb-xs">3. Selective Pressure</h4>
+            <p className="font-body-sm text-on-surface-variant">Skipping doses or stopping early leaves sub-therapeutic levels of antibiotics. This doesn't eradicate the colony but acts as a selective filter, allowing partially resistant bacteria to adapt and build defenses like efflux pumps.</p>
+          </div>
+        </div>
+      </section>
+
       {/* Core Concepts & Myth vs Fact - Interactive Flip Cards */}
       <section>
         <h2 className="font-headline-lg text-headline-lg text-primary mb-lg border-b border-outline-variant pb-sm">Myth vs. Fact Clinical Review</h2>

@@ -14,7 +14,7 @@ Rules:
 - Do not name or suggest any antibiotic, drug, or dosage.
 - Do not give any treatment instruction.
 - Always end with: "Please consult a registered medical practitioner."
-- Explain only why the reported behavior is associated with antimicrobial resistance, based on the provided guideline snippet."""
+- Explain the biological mechanism of resistance (e.g., mutation, selective pressure, survival advantage) based on the provided guideline snippet. Do not just state that it causes resistance; explain *how* biologically."""
 
 STRICTER_FALLBACK_PROMPT = SYSTEM_PROMPT + "\nCRITICAL: You must not mention any medication name, dosage, or diagnostic statement under any circumstances. Respond ONLY about behavioral risk factors."
 

@@ -6,27 +6,27 @@
   },
   "GDL-02": {
     "title": "Complete the Prescribed Course",
-    "snippet": "Stopping an antibiotic course before completion, even if symptoms improve, can allow partially resistant bacteria to survive and multiply, accelerating antimicrobial resistance.",
+    "snippet": "Stopping an antibiotic course before completion leaves partially resistant bacteria alive. These survivors multiply, passing on genetic mutations that make future infections harder to treat.",
     "source": "WHO/CDC AMR Guidance"
   },
   "GDL-03": {
     "title": "Avoid Self-Medication",
-    "snippet": "Using leftover antibiotics or self-medicating without a prescription is a major driver of AMR. The wrong antibiotic or wrong duration can select for resistant bacteria.",
+    "snippet": "Self-medicating often means using the wrong drug or dosage. This creates intense selective pressure, killing weak bacteria but allowing mutated, drug-resistant strains to thrive and spread.",
     "source": "ICMR/WHO Guidelines"
   },
   "GDL-04": {
     "title": "Antibiotics vs Viral Infections",
-    "snippet": "Antibiotics do not work against viral infections such as common colds and most coughs. Using antibiotics for viral symptoms provides no benefit and increases AMR risk.",
+    "snippet": "Antibiotics do not kill viruses. Using them for viral illnesses offers no cure, but unnecessarily exposes your body's healthy microbiome to evolutionary pressure, selecting for resistant 'superbugs'.",
     "source": "CDC Antibiotic Use Guidelines"
   },
   "GDL-05": {
     "title": "Dose Adherence Matters",
-    "snippet": "Skipping doses creates periods of sub-therapeutic drug levels, giving bacteria an opportunity to develop resistance mechanisms.",
+    "snippet": "Skipping doses creates sub-therapeutic drug levels in the bloodstream. This gives bacteria time to rapidly adapt, mutate, and develop biological defenses (like efflux pumps) against the antibiotic.",
     "source": "WHO AMR Guidance"
   },
   "GDL-06": {
     "title": "Frequent Antibiotic Use",
-    "snippet": "Frequent antibiotic use within short periods increases selective pressure on bacteria, raising the likelihood of resistance development.",
+    "snippet": "Repeated antibiotic use applies constant selective pressure on your microbiome. Bacteria are forced to evolve defenses or share resistance genes (plasmids) with other bacteria to survive.",
     "source": "ICMR AMR Action Plan"
   },
   "GDL-07": {

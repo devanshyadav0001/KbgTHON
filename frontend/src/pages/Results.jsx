@@ -12,7 +12,7 @@ export default function Results() {
   const state = location.state;
 
   const [assessData] = useState(state?.assessData || null);
-  const [explainData, setExplainData] = useState(null);
+  const [explainData, setExplainData] = useState(state?.explainData || null);
   const [loadingExplain, setLoadingExplain] = useState(false);
 
   useEffect(() => {

@@ -76,7 +76,7 @@ export function useAssessment() {
       }
       
       setRiskResult(assessData)
-
+      
       // 3. Get LLM explanation — backend expects { score, category, reasons: [RiskReason], snippets: {ref_id: text} }
       const explainPayload = {
         score: assessData.score,

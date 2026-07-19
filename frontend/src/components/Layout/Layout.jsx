@@ -14,15 +14,15 @@ export default function Layout({ children }) {
             {/* Logo / Brand */}
             <NavLink to="/" className="group flex items-center gap-3 cursor-pointer transition-transform duration-300 hover:scale-[1.02]" title="Go to Home">
               <svg width="24" height="24" viewBox="0 0 24 24" className="overflow-visible">
-                <g style={{ filter: "drop-shadow(-1px 0.5px 0px #d97706) drop-shadow(1px -0.5px 0px #0284c7)" }}>
-                  <rect x="5.5" y="2" width="13" height="2.5" fill="#3b6e52" />
-                  <rect x="3" y="6" width="18" height="16" rx="2.5" fill="#3b6e52" />
-                  <path d="M10.5 9.5 h3 v3 h3 v3 h-3 v3 h-3 v-3 h-3 v-3 h3 z" fill="#ffffff" />
+                <g style={{ filter: "drop-shadow(-1px 0px 0px #d97706) drop-shadow(1px 0px 0px #0284c7)" }}>
+                  <rect x="4" y="2" width="16" height="2.5" rx="0.5" fill="#3b6e52" />
+                  <rect x="3" y="6" width="18" height="16" rx="3" fill="#3b6e52" />
+                  <path d="M10.5 10 h3 v3 h3 v3 h-3 v3 h-3 v-3 h-3 v-3 h3 z" fill="#ffffff" />
                 </g>
               </svg>
               <span 
-                className="font-mono text-[15px] tracking-[0.15em] font-bold uppercase text-[#182420] ml-1"
-                style={{ textShadow: "-1px 0.5px 0px #d97706, 1px -0.5px 0px #0284c7" }}
+                className="font-mono text-[16px] tracking-[0.15em] font-bold uppercase text-[#182420] ml-1"
+                style={{ textShadow: "-1px 0px 0px #d97706, 1px 0px 0px #0284c7" }}
               >
                 RX-AMR
               </span>

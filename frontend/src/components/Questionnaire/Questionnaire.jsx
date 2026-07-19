@@ -13,7 +13,7 @@ const ANTIBIOTICS = [
   "Paracetamol / Dolo / Calpol (Painkiller) — [Fever, headache, body pain – NOT an antibiotic]",
   "Ibuprofen / Combiflam (Painkiller) — [Pain, inflammation, fever – NOT an antibiotic]",
   "Other (Type custom medication)",
-  "Don't know"
+  "I don't remember the name (just know it's a 'strong' antibiotic)"
 ];
 
 const SOURCES = [
@@ -86,7 +86,10 @@ export default function Questionnaire({ onSubmit, loading }) {
     kept_leftovers: null,
     pregnancy: null,
     chronic_disease: null,
+    chronic_disease_types: [],
     recent_test_results: '',
+    doses_skipped_freq: '',
+    past_courses: '',
   });
 
   const update = (fields) => setData(prev => ({ ...prev, ...fields }));
@@ -148,9 +151,12 @@ export default function Questionnaire({ onSubmit, loading }) {
       days_completed: data.days_completed ? parseInt(data.days_completed, 10) : null,
       pregnancy: data.pregnancy === true,
       chronic_disease: data.chronic_disease === true,
+      chronic_disease_types: data.chronic_disease_types,
       diagnostic_test: data.diagnostic_test === true,
       kept_leftovers: data.kept_leftovers === true,
       recent_test_results: data.recent_test_results || '',
+      doses_skipped_freq: data.doses_skipped_freq || '',
+      past_courses: data.past_courses || '',
     });
   };
 
@@ -158,7 +164,7 @@ export default function Questionnaire({ onSubmit, loading }) {
     switch (currentStep.id) {
       case 'context': 
         const isAdultFemale = data.gender === 'Female' && parseInt(data.age) >= 18;
-        return data.age > 0 && data.gender !== '' && (!isAdultFemale || data.pregnancy !== null) && data.chronic_disease !== null;
+        return data.age > 0 && data.gender !== '' && (!isAdultFemale || data.pregnancy !== null) && data.chronic_disease !== null && (!data.chronic_disease || data.chronic_disease_types.length > 0);
       case 'symptoms': return data.symptoms.length > 0 && data.symptom_duration !== '';
       case 'source': 
         if (data.suggestion_source === '') return false;
@@ -168,15 +174,15 @@ export default function Questionnaire({ onSubmit, loading }) {
         const allMedsValid = data.medications.every(m => {
           if (m.name === '') return false;
           if (m.isCustom && m.customName === '') return false;
-          if (m.dosage === '') return false;
+          if (m.name !== "I don't remember the name (just know it's a 'strong' antibiotic)" && m.dosage === '') return false;
           return true;
         });
         if (!allMedsValid) return false;
         if (data.diagnostic_test === null) return false;
         return true;
       case 'course': 
-        return data.days_prescribed !== '' && data.days_completed !== '' && data.doses_skipped !== null && data.kept_leftovers !== null;
-      case 'history': return data.prior_use_6mo !== null && data.shared_antibiotics !== null;
+        return data.days_prescribed !== '' && data.days_completed !== '' && data.doses_skipped !== null && (!data.doses_skipped || data.doses_skipped_freq !== '') && data.kept_leftovers !== null;
+      case 'history': return data.past_courses !== '' && data.shared_antibiotics !== null;
       default: return true;
     }
   };
@@ -192,7 +198,7 @@ export default function Questionnaire({ onSubmit, loading }) {
       return "ℹ️ No recent antibiotic use reported. Proceeding to medical history.";
     }
     if (currentStep.id === 'course' && data.suggestion_source !== 'Doctor' && data.suggestion_source !== 'None') {
-      return "⚠️ No doctor consultation recorded. Assessing unprescribed usage.";
+      return "⚠️ No doctor consultation recorded. Assessing unprescribed usage. Even if you completed the days, using antibiotics without a doctor's plan can still be risky.";
     }
     return null;
   };
@@ -206,13 +212,13 @@ export default function Questionnaire({ onSubmit, loading }) {
         {/* Progress Indicator */}
         <div className="flex flex-col gap-sm">
           <div className="flex justify-between items-center text-label-sm font-label-sm text-on-surface-variant">
-            <span>Step {stepIdx + 1} of {totalSteps} {totalSteps < 5 && "(Adaptive)"}</span>
+            <span>Step {currentStep.id === 'history' && totalSteps < 5 ? 5 : stepIdx + 1} of 5 {totalSteps < 5 && stepIdx === totalSteps - 1 ? "(Adaptive Skip)" : ""}</span>
             <span>{currentStep.label}</span>
           </div>
           <div className="h-1 bg-surface-container-high rounded-full w-full overflow-hidden">
             <div 
               className="h-full bg-primary rounded-full transition-all duration-300" 
-              style={{ width: `${((stepIdx + 1) / totalSteps) * 100}%` }}
+              style={{ width: `${((currentStep.id === 'history' && totalSteps < 5 ? 5 : stepIdx + 1) / 5) * 100}%` }}
             ></div>
           </div>
         </div>
@@ -274,8 +280,41 @@ export default function Questionnaire({ onSubmit, loading }) {
                   <YesNoCard
                     label="Do you have any chronic diseases (e.g., Diabetes, Asthma)?"
                     value={data.chronic_disease}
-                    onChange={(v) => update({ chronic_disease: v })}
+                    onChange={(v) => update({ chronic_disease: v, chronic_disease_types: v ? data.chronic_disease_types : [] })}
                   />
+
+                  {data.chronic_disease === true && (
+                    <div className="mt-4 animate-fade-in">
+                      <label className="block text-label-md font-label-md text-on-surface mb-sm">Select condition(s):</label>
+                      <div className="flex flex-wrap gap-sm">
+                        {['Diabetes', 'Asthma', 'Heart disease', 'Kidney disease', 'Liver disease', 'Other'].map(cond => {
+                          const isSelected = data.chronic_disease_types.includes(cond);
+                          const styleClass = isSelected 
+                            ? 'bg-primary border-primary text-on-primary' 
+                            : 'bg-surface-container-lowest border-outline-variant text-on-surface-variant hover:bg-surface-container-low hover:border-outline';
+                          return (
+                            <label key={cond} className="cursor-pointer">
+                              <input 
+                                type="checkbox" 
+                                className="peer sr-only" 
+                                checked={isSelected}
+                                onChange={() => {
+                                  if (isSelected) {
+                                    update({ chronic_disease_types: data.chronic_disease_types.filter(c => c !== cond) });
+                                  } else {
+                                    update({ chronic_disease_types: [...data.chronic_disease_types, cond] });
+                                  }
+                                }}
+                              />
+                              <div className={`text-label-md font-label-md px-4 py-2 rounded-full border transition-all duration-200 ${styleClass}`}>
+                                {cond}
+                              </div>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -301,6 +340,16 @@ export default function Questionnaire({ onSubmit, loading }) {
 
                 <div className="mt-4">
                   <label className="block text-label-md font-label-md text-on-surface mb-sm">Symptoms (Select all that apply)</label>
+                  
+                  {data.symptoms.some(s => ["High persistent fever", "Confusion", "Breathlessness", "Severe abdominal pain"].includes(s)) && (
+                    <div className="bg-error-container/20 border border-error/50 rounded p-sm flex items-start gap-sm mb-md animate-fade-in">
+                      <span className="material-symbols-outlined text-error mt-0.5">warning</span>
+                      <p className="text-body-sm font-body-sm text-error font-medium">
+                        You selected symptoms that can be serious. This tool will still explain misuse risk, but please consider seeing a doctor urgently.
+                      </p>
+                    </div>
+                  )}
+
                   <div className="flex flex-wrap gap-sm">
                     {SYMPTOMS.map(sym => {
                       const isSelected = data.symptoms.includes(sym);
@@ -315,8 +364,12 @@ export default function Questionnaire({ onSubmit, loading }) {
                         styleClass = 'bg-error text-on-error border-error';
                       }
 
+                      let tooltipText = '';
+                      if (sym === 'Dengue-like fever') tooltipText = 'High fever with body pain, maybe rash';
+                      if (sym === 'Urinary Tract Infection (UTI)') tooltipText = 'Pain or burning during urination';
+
                       return (
-                        <label key={sym} className="cursor-pointer">
+                        <label key={sym} className="cursor-pointer relative group">
                           <input 
                             type="checkbox" 
                             className="peer sr-only" 
@@ -326,6 +379,11 @@ export default function Questionnaire({ onSubmit, loading }) {
                           <div className={`text-label-md font-label-md px-4 py-2 rounded-full border transition-all duration-200 ${styleClass}`}>
                             {sym}
                           </div>
+                          {tooltipText && (
+                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block w-max max-w-[200px] bg-surface-container-highest text-on-surface text-xs p-2 rounded shadow-lg z-20 normal-case text-center">
+                              {tooltipText}
+                            </div>
+                          )}
                         </label>
                       );
                     })}
@@ -461,15 +519,11 @@ export default function Questionnaire({ onSubmit, loading }) {
                       />
 
                       {data.diagnostic_test === true && (
-                        <div className="mt-md animate-fade-in">
-                          <label className="block text-label-md font-label-md text-on-surface mb-xs">Share your test results (optional but highly recommended)</label>
-                          <p className="text-body-sm font-body-sm text-on-surface-variant mb-sm">Sharing your recent test results (e.g., CBC, CRP, blood culture, urine culture) helps our AI provide a much more accurate and personalized risk analysis.</p>
-                          <textarea
-                            value={data.recent_test_results}
-                            onChange={(e) => update({ recent_test_results: e.target.value })}
-                            className="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-body-sm font-body-sm min-h-[100px] resize-y"
-                            placeholder="e.g., CBC: WBC 12,000/μL (high), CRP: 48 mg/L (elevated), Urine culture: E. coli detected…"
-                          />
+                        <div className="mt-md animate-fade-in bg-surface-container-low p-sm rounded border border-outline-variant/50">
+                          <p className="text-body-sm font-body-sm text-on-surface-variant flex gap-sm items-center">
+                            <span className="material-symbols-outlined text-primary text-sm">verified</span>
+                            Lab tests help doctors prescribe the right antibiotic and prevent resistance.
+                          </p>
                         </div>
                       )}
                     </div>
@@ -524,8 +578,24 @@ export default function Questionnaire({ onSubmit, loading }) {
                   <YesNoCard
                     label="Were any doses skipped or delayed?"
                     value={data.doses_skipped}
-                    onChange={(v) => update({ doses_skipped: v })}
+                    onChange={(v) => update({ doses_skipped: v, doses_skipped_freq: v ? data.doses_skipped_freq : '' })}
                   />
+
+                  {data.doses_skipped === true && (
+                    <div className="mt-4 animate-fade-in">
+                      <label className="block text-label-md font-label-md text-on-surface mb-xs">How many doses were skipped or delayed?</label>
+                      <select 
+                        value={data.doses_skipped_freq}
+                        onChange={e => update({ doses_skipped_freq: e.target.value })}
+                        className="w-full bg-surface-container-lowest border border-outline-variant rounded p-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-body-md font-body-md"
+                      >
+                        <option value="" disabled>Select frequency</option>
+                        <option value="1-2">1-2 doses</option>
+                        <option value="3-5">3-5 doses</option>
+                        <option value="More than 5">More than 5 doses</option>
+                      </select>
+                    </div>
+                  )}
                 </div>
 
                 <div className="border-t border-outline-variant pt-md mt-md">
@@ -541,11 +611,20 @@ export default function Questionnaire({ onSubmit, loading }) {
             {/* HISTORY */}
             {currentStep.id === 'history' && (
               <div className="flex flex-col gap-xl">
-                <YesNoCard
-                  label="Have you taken antibiotics in the last 6 months?"
-                  value={data.prior_use_6mo}
-                  onChange={(v) => update({ prior_use_6mo: v })}
-                />
+                <div>
+                  <label className="block text-headline-sm md:text-headline-md font-headline-sm md:font-headline-md text-on-surface mb-xs">How many courses of antibiotics have you taken in the last 6 months?</label>
+                  <select 
+                    value={data.past_courses}
+                    onChange={e => update({ past_courses: e.target.value })}
+                    className="w-full bg-surface-container-lowest border border-outline-variant rounded p-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-body-lg font-body-lg mt-sm cursor-pointer"
+                  >
+                    <option value="" disabled>Select an option</option>
+                    <option value="0">0 courses</option>
+                    <option value="1">1 course</option>
+                    <option value="2-3">2-3 courses</option>
+                    <option value="4+">4 or more courses</option>
+                  </select>
+                </div>
 
                 <div className="border-t border-outline-variant pt-md">
                   <YesNoCard

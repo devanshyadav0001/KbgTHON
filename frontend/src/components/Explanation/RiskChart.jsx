@@ -34,9 +34,9 @@ export default function RiskChart({ currentScore }) {
           <line x1="0" y1="0" x2={w} y2="0" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" className="text-outline-variant/50" />
           
           {/* Y Axis Labels */}
-          <text x="0" y={h - 5} fontSize="10" className="fill-on-surface-variant font-label-sm">0%</text>
-          <text x="0" y={h/2 - 5} fontSize="10" className="fill-on-surface-variant font-label-sm">50%</text>
-          <text x="0" y="10" fontSize="10" className="fill-on-surface-variant font-label-sm">100%</text>
+          <text x="0" y={h - 5} fontSize="10" className="fill-on-surface-variant font-label-sm">Low</text>
+          <text x="0" y={h/2 - 5} fontSize="10" className="fill-on-surface-variant font-label-sm">Mod</text>
+          <text x="0" y="10" fontSize="10" className="fill-on-surface-variant font-label-sm">High</text>
 
           {/* Area under the curve */}
           <path 
@@ -65,9 +65,9 @@ export default function RiskChart({ currentScore }) {
           <text x={p3.x} y={h + 20} textAnchor="middle" fontSize="12" className="fill-on-surface-variant font-label-md">1 Year</text>
 
           {/* Value Labels */}
-          <text x={p1.x} y={p1.y - 10} textAnchor="middle" fontSize="12" className="fill-error font-bold">{Math.round(todayRisk)}%</text>
-          <text x={p2.x} y={p2.y - 10} textAnchor="middle" fontSize="12" className="fill-error font-bold">{Math.round(month3Risk)}%</text>
-          <text x={p3.x} y={p3.y - 10} textAnchor="middle" fontSize="12" className="fill-error font-bold">{Math.round(year1Risk)}%</text>
+          <text x={p1.x} y={p1.y - 10} textAnchor="middle" fontSize="12" className="fill-error font-bold">~{Math.max(0, Math.round(todayRisk) - 5)}-{Math.min(100, Math.round(todayRisk) + 5)}%</text>
+          <text x={p2.x} y={p2.y - 10} textAnchor="middle" fontSize="12" className="fill-error font-bold">~{Math.max(0, Math.round(month3Risk) - 5)}-{Math.min(100, Math.round(month3Risk) + 5)}%</text>
+          <text x={p3.x} y={p3.y - 10} textAnchor="middle" fontSize="12" className="fill-error font-bold">~{Math.max(0, Math.round(year1Risk) - 5)}-{Math.min(100, Math.round(year1Risk) + 5)}%</text>
 
           {/* Gradient Def */}
           <defs>
@@ -79,7 +79,7 @@ export default function RiskChart({ currentScore }) {
         </svg>
       </div>
       <p className="text-body-sm text-on-surface-variant text-center mt-2 italic">
-        * Projected probability of acquiring an antibiotic-resistant infection based on current behaviors.
+        * Illustrative educational projection based on current habits, <strong>not a medical prediction</strong>.
       </p>
     </div>
   );

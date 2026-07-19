@@ -54,7 +54,7 @@ def evaluate(input_data: QuestionnaireInput) -> RiskResult:
             triggered = input_data.doses_skipped
 
         elif rule["id"] == "RULE-06":
-            triggered = input_data.prior_use_6mo
+            triggered = input_data.prior_use_6mo or input_data.past_courses in ("1", "2-3", "4+")
 
         elif rule["id"] == "RULE-07":
             triggered = input_data.shared_antibiotics
@@ -163,7 +163,7 @@ def evaluate(input_data: QuestionnaireInput) -> RiskResult:
             "Take every antibiotic dose at the prescribed time."
         )
 
-    if input_data.prior_use_6mo:
+    if input_data.prior_use_6mo or input_data.past_courses in ("1", "2-3", "4+"):
         recommendations.append(
             "Avoid unnecessary repeated antibiotic use within short periods."
         )

@@ -22,6 +22,9 @@ class QuestionnaireInput(BaseModel):
     pregnancy: Optional[bool] = None
     chronic_disease: Optional[bool] = None
     recent_test_results: Optional[str] = None
+    doses_skipped_freq: Optional[str] = None
+    past_courses: Optional[str] = None
+    chronic_disease_types: Optional[List[str]] = []
 
     def model_post_init(self, __context):
         # Derive self_medicated from suggestion_source if not explicitly set

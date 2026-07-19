@@ -51,7 +51,13 @@ export default function RiskResult({ data, variant = "all" }) {
         <div className="flex flex-col gap-sm max-w-[320px]">
           <h4 className={`text-label-md font-label-md ${colorClass}`}>Severity: {getSeverityText()}</h4>
           <p className="text-body-sm font-body-sm text-on-surface-variant">
-            The index score is derived from algorithmic weighting of key clinical variables based on WHO/CDC guidelines. Scores above 70 warrant intervention protocols.
+            We combine your answers into a single risk score, based on widely used guidelines on safe antibiotic use. Scores above 70 mean your habits may need serious changes; talk to a doctor.
+          </p>
+          <p className="text-label-sm font-label-sm text-on-surface-variant mt-2 border-t border-outline-variant pt-2">
+            <strong>What this score means:</strong><br/>
+            0–30: Low risk<br/>
+            31–60: Moderate risk<br/>
+            61+: High risk
           </p>
         </div>
       </div>
@@ -85,7 +91,7 @@ export default function RiskResult({ data, variant = "all" }) {
                   </div>
                 </div>
                 <span className={`${badgeBg} px-2 py-1 rounded text-label-sm font-label-sm font-bold ml-2 shrink-0`}>
-                  +{reason.weight * 10} pts
+                  {isHighWeight ? 'High Impact' : 'Moderate Impact'}
                 </span>
               </li>
             );

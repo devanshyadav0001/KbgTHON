@@ -8,16 +8,15 @@ export default function Layout({ children }) {
   return (
     <>
       {/* Floating Pill Navbar Wrapper */}
-      <div className="fixed top-2 left-0 right-0 z-50 flex justify-center px-margin-mobile pointer-events-none">
-        <nav className="pointer-events-auto bg-surface/90 backdrop-blur-md text-on-surface rounded-full flex items-center justify-between px-2 py-2 shadow-sm border border-outline-variant/30 w-auto gap-8 transition-all hover:shadow-md">
+      <div className="fixed top-6 left-0 right-0 z-50 flex justify-center pointer-events-none px-4 animate-fade-up" style={{ animationDelay: '0.2s' }}>
+        <nav className="pointer-events-auto bg-surface/70 backdrop-blur-3xl text-on-surface rounded-full flex items-center justify-between p-1.5 shadow-ambient border border-outline-variant/30 w-max gap-8 transition-all hover:scale-[1.01] ease-spring duration-500">
             
             {/* Logo / Brand */}
-            <NavLink to="/" className="group flex items-center gap-2 bg-primary/10 rounded-full pr-4 pl-1 py-1 cursor-pointer hover:bg-primary/20 transition-colors" title="Go to Home">
+            <NavLink to="/" className="group flex items-center gap-2 bg-surface-container-low rounded-full pr-4 pl-1.5 py-1.5 cursor-pointer hover:bg-surface-container transition-colors shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)]" title="Go to Home">
               <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-sm relative overflow-hidden">
-                <span className="material-symbols-outlined text-on-primary text-lg select-none animate-spin-slow group-hover:scale-110 transition-transform duration-300" style={{fontVariationSettings: "'FILL' 0", animationDuration: '8s'}}>public</span>
-                <div className="absolute inset-0 bg-primary/30 animate-ping rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <span className="material-symbols-outlined text-on-primary text-lg select-none group-hover:scale-110 transition-transform duration-500 ease-spring" style={{fontVariationSettings: "'FILL' 0"}}>public</span>
               </div>
-              <span className="text-sm font-bold text-primary tracking-tight">AMR Guard</span>
+              <span className="text-sm font-bold tracking-tight text-on-surface">AMR Guard</span>
             </NavLink>
             
             {/* Links */}
@@ -43,8 +42,11 @@ export default function Layout({ children }) {
             </div>
 
             {/* Action Button */}
-            <NavLink to="/assessment" className="bg-primary text-on-primary px-6 py-2 rounded-full font-bold text-sm hover:bg-primary/90 transition-all shadow-sm hover:shadow cursor-pointer shrink-0 ml-2">
+            <NavLink to="/assessment" className="group bg-primary text-on-primary pl-6 pr-2 py-2 rounded-full font-bold text-sm hover:bg-primary/90 transition-all shadow-sm cursor-pointer shrink-0 ml-2 flex items-center gap-2 active:scale-[0.98] ease-spring duration-500">
               Start Check
+              <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center transition-transform duration-500 ease-spring group-hover:translate-x-1 group-hover:-translate-y-[1px] group-hover:scale-105">
+                <span className="material-symbols-outlined text-sm" style={{fontVariationSettings: "'wght' 600" }}>arrow_forward</span>
+              </div>
             </NavLink>
           </nav>
         </div>

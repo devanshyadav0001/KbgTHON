@@ -73,17 +73,21 @@ function FlipCard({ item }) {
       style={{ perspective: '1000px' }}
       onClick={() => setFlipped(!flipped)}
     >
-      <div className={`absolute w-full h-full transition-all duration-500 rounded-xl shadow-sm ${flipped ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'} bg-surface-container-lowest border-2 border-outline-variant hover:border-primary flex flex-col items-center justify-center p-lg text-center`}>
-        <span className="bg-error-container text-on-error-container font-label-sm text-label-sm px-2 py-1 rounded absolute top-4 left-4">Myth</span>
-        <h4 className="font-headline-sm text-headline-sm text-primary">{item.myth}</h4>
-        <div className="absolute bottom-4 right-4 flex items-center gap-1 text-on-surface-variant font-label-sm">
-          <span className="material-symbols-outlined text-sm">touch_app</span> Tap to reveal
+      <div className={`absolute w-full h-full p-1.5 transition-all duration-500 ease-spring rounded-[2rem] border ${flipped ? 'opacity-0 scale-95 pointer-events-none border-outline-variant bg-surface-container-highest' : 'opacity-100 scale-100 border-outline-variant bg-surface-container-highest hover:scale-[1.02]'}`}>
+        <div className="bg-surface-container-lowest rounded-[calc(2rem-6px)] w-full h-full flex flex-col items-center justify-center p-8 text-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.7)]">
+          <span className="bg-error/10 text-error font-label-sm text-label-sm px-2 py-1 rounded absolute top-4 left-4">Myth</span>
+          <h4 className="font-headline-sm text-headline-sm text-on-surface">{item.myth}</h4>
+          <div className="absolute bottom-4 right-4 flex items-center gap-1 text-on-surface-variant font-label-sm">
+            <span className="material-symbols-outlined text-sm transition-transform group-hover:scale-110">touch_app</span> Tap to reveal
+          </div>
         </div>
       </div>
-      <div className={`absolute w-full h-full transition-all duration-500 rounded-xl shadow-sm ${flipped ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'} bg-primary-container border-2 border-primary flex flex-col items-center justify-center p-lg text-center`}>
-        <span className="bg-primary text-on-primary font-label-sm text-label-sm px-2 py-1 rounded absolute top-4 left-4">Fact</span>
-        <p className="font-body-md text-body-md text-on-primary-container mb-sm font-bold">{item.fact}</p>
-        <p className="font-label-sm text-label-sm text-on-primary-container/80 absolute bottom-4 text-center w-full">{item.source}</p>
+      <div className={`absolute w-full h-full p-1.5 transition-all duration-500 ease-spring rounded-[2rem] border ${flipped ? 'opacity-100 scale-100 bg-primary/20 border-primary/50' : 'opacity-0 scale-95 pointer-events-none border-primary/20 bg-surface-container-highest'}`}>
+        <div className="bg-primary rounded-[calc(2rem-6px)] w-full h-full flex flex-col items-center justify-center p-8 text-center shadow-ambient">
+          <span className="bg-white/20 text-on-primary font-label-sm text-label-sm px-2 py-1 rounded absolute top-4 left-4">Fact</span>
+          <p className="font-body-md text-body-md text-on-primary mb-sm font-bold">{item.fact}</p>
+          <p className="font-label-sm text-label-sm text-on-primary/80 absolute bottom-4 text-center w-full">{item.source}</p>
+        </div>
       </div>
     </div>
   );
@@ -92,21 +96,23 @@ function FlipCard({ item }) {
 function Accordion({ title, children }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border border-outline-variant rounded-lg overflow-hidden mb-4 shadow-sm bg-surface-container-lowest">
-      <button 
-        onClick={() => setOpen(!open)}
-        className="w-full flex justify-between items-center p-md bg-surface hover:bg-surface-container-low transition-colors text-left"
-      >
-        <span className="font-headline-sm text-headline-sm text-primary">{title}</span>
-        <span className="material-symbols-outlined text-on-surface-variant transition-transform" style={{transform: open ? 'rotate(180deg)' : 'rotate(0deg)'}}>
-          expand_more
-        </span>
-      </button>
-      {open && (
-        <div className="p-md bg-surface-container-lowest border-t border-outline-variant">
-          {children}
+    <div className="p-1 border border-outline-variant rounded-2xl mb-4 bg-surface-container-highest transition-all duration-500 ease-spring">
+      <div className="bg-surface-container-lowest rounded-[calc(1rem-4px)] w-full overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.7)]">
+        <button 
+          onClick={() => setOpen(!open)}
+          className="w-full flex justify-between items-center p-6 hover:bg-surface-container transition-colors text-left outline-none cursor-pointer"
+        >
+          <span className="font-headline-sm text-headline-sm text-on-surface">{title}</span>
+          <span className="material-symbols-outlined text-on-surface-variant transition-transform duration-500 ease-spring" style={{transform: open ? 'rotate(180deg)' : 'rotate(0deg)'}}>
+            expand_more
+          </span>
+        </button>
+        <div className={`overflow-hidden transition-all duration-500 ease-spring ${open ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div className="p-6 pt-0 border-t border-outline-variant/30 mt-2">
+            {children}
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
@@ -125,22 +131,28 @@ export default function Learn() {
 
       {/* India Stats */}
       <section>
-        <h2 className="font-headline-lg text-headline-lg text-primary mb-lg border-b border-outline-variant pb-sm">India at a Glance</h2>
+        <h2 className="font-headline-lg text-headline-lg text-on-surface mb-lg border-b border-outline-variant pb-sm">India at a Glance</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-md">
-          <div className="bg-primary text-on-primary p-lg rounded-xl shadow-sm">
-            <span className="material-symbols-outlined text-4xl mb-sm" style={{fontVariationSettings: "'FILL' 1"}}>pill</span>
-            <h3 className="font-headline-md text-headline-md mb-xs">53–82%</h3>
-            <p className="font-body-sm text-body-sm opacity-90">Self-medication rates in pooled Indian studies, spiking up to 82% in northern regions.</p>
+          <div className="p-1.5 border border-primary/20 rounded-[2rem] bg-primary/10 transition-transform duration-500 ease-spring hover:scale-[1.02]">
+            <div className="bg-primary text-on-primary p-6 rounded-[calc(2rem-6px)] h-full shadow-ambient flex flex-col justify-center text-center">
+              <span className="material-symbols-outlined text-4xl mb-sm mx-auto" style={{fontVariationSettings: "'FILL' 1"}}>pill</span>
+              <h3 className="font-headline-md text-headline-md mb-xs">53–82%</h3>
+              <p className="font-body-sm text-body-sm opacity-90">Self-medication rates in pooled Indian studies, spiking up to 82% in northern regions.</p>
+            </div>
           </div>
-          <div className="bg-secondary text-on-secondary p-lg rounded-xl shadow-sm">
-            <span className="material-symbols-outlined text-4xl mb-sm" style={{fontVariationSettings: "'FILL' 1"}}>local_pharmacy</span>
-            <h3 className="font-headline-md text-headline-md mb-xs">85–95%</h3>
-            <p className="font-body-sm text-body-sm opacity-90">Pharmacies dispensing antibiotics OTC without a prescription for simple fever or cough.</p>
+          <div className="p-1.5 border border-outline-variant rounded-[2rem] bg-surface-container-highest transition-transform duration-500 ease-spring hover:scale-[1.02]">
+            <div className="bg-surface-container-lowest text-on-surface p-6 rounded-[calc(2rem-6px)] h-full shadow-[inset_0_1px_1px_rgba(255,255,255,0.7)] flex flex-col justify-center text-center">
+              <span className="material-symbols-outlined text-4xl mb-sm mx-auto text-primary" style={{fontVariationSettings: "'FILL' 1"}}>local_pharmacy</span>
+              <h3 className="font-headline-md text-headline-md mb-xs">85–95%</h3>
+              <p className="font-body-sm text-body-sm text-on-surface-variant">Pharmacies dispensing antibiotics OTC without a prescription for simple fever or cough.</p>
+            </div>
           </div>
-          <div className="bg-error text-on-error p-lg rounded-xl shadow-sm">
-            <span className="material-symbols-outlined text-4xl mb-sm" style={{fontVariationSettings: "'FILL' 1"}}>trending_up</span>
-            <h3 className="font-headline-md text-headline-md mb-xs">Highest Consumers</h3>
-            <p className="font-body-sm text-body-sm opacity-90">India is among the highest global antibiotic consumers with rapidly rising resistance in E. coli & MRSA.</p>
+          <div className="p-1.5 border border-error/20 rounded-[2rem] bg-error/10 transition-transform duration-500 ease-spring hover:scale-[1.02]">
+            <div className="bg-error text-on-error p-6 rounded-[calc(2rem-6px)] h-full shadow-ambient flex flex-col justify-center text-center">
+              <span className="material-symbols-outlined text-4xl mb-sm mx-auto" style={{fontVariationSettings: "'FILL' 1"}}>trending_up</span>
+              <h3 className="font-headline-md text-headline-md mb-xs">Highest Consumers</h3>
+              <p className="font-body-sm text-body-sm opacity-90">India is among the highest global antibiotic consumers with rapidly rising resistance in E. coli & MRSA.</p>
+            </div>
           </div>
         </div>
       </section>

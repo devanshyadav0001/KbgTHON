@@ -44,9 +44,11 @@ const YesNoCard = ({ label, description, value, onChange }) => {
           checked={value === true}
           onChange={() => onChange(true)}
         />
-        <div className="w-full h-full p-md md:p-lg border border-outline-variant rounded bg-surface-container-lowest flex flex-col items-center justify-center gap-sm transition-all duration-200 peer-checked:border-primary peer-checked:border-2 peer-checked:bg-surface-container-low hover:border-outline peer-focus-visible:ring-2 peer-focus-visible:ring-primary peer-focus-visible:ring-offset-2 min-h-[140px]">
-          <span className="material-symbols-outlined text-3xl text-on-surface-variant group-hover:text-on-surface peer-checked:text-primary transition-colors">check_circle</span>
-          <span className="text-label-md font-label-md text-on-surface-variant group-hover:text-on-surface peer-checked:text-primary peer-checked:font-bold transition-all">Yes</span>
+        <div className="w-full h-full p-1.5 border border-outline-variant rounded-[2rem] bg-surface-container-highest flex flex-col transition-all duration-500 ease-spring peer-checked:bg-primary/20 peer-checked:border-primary/50 hover:scale-[1.02]">
+          <div className="bg-surface-container-lowest rounded-[calc(2rem-6px)] w-full h-full flex flex-col items-center justify-center gap-sm min-h-[140px] shadow-[inset_0_1px_1px_rgba(255,255,255,0.7)] transition-all duration-500 ease-spring peer-checked:bg-primary peer-checked:shadow-ambient">
+            <span className="material-symbols-outlined text-3xl text-on-surface-variant group-hover:text-on-surface peer-checked:text-on-primary transition-colors">check_circle</span>
+            <span className="text-label-md font-label-md text-on-surface-variant group-hover:text-on-surface peer-checked:text-on-primary peer-checked:font-bold transition-all">Yes</span>
+          </div>
         </div>
       </label>
       
@@ -58,10 +60,11 @@ const YesNoCard = ({ label, description, value, onChange }) => {
           checked={value === false}
           onChange={() => onChange(false)}
         />
-        <div className="w-full h-full p-md md:p-lg border border-outline-variant rounded bg-surface-container-lowest flex flex-col items-center justify-center gap-sm transition-all duration-200 peer-checked:border-primary peer-checked:border-2 peer-checked:bg-surface-container-low hover:border-outline peer-focus-visible:ring-2 peer-focus-visible:ring-primary peer-focus-visible:ring-offset-2 min-h-[140px]">
-          <span className="material-symbols-outlined text-3xl text-on-surface-variant group-hover:text-on-surface peer-checked:text-primary transition-colors">cancel</span>
-
-          <span className="text-label-md font-label-md text-on-surface-variant group-hover:text-on-surface peer-checked:text-primary peer-checked:font-bold transition-all">No</span>
+        <div className="w-full h-full p-1.5 border border-outline-variant rounded-[2rem] bg-surface-container-highest flex flex-col transition-all duration-500 ease-spring peer-checked:bg-error/20 peer-checked:border-error/50 hover:scale-[1.02]">
+          <div className="bg-surface-container-lowest rounded-[calc(2rem-6px)] w-full h-full flex flex-col items-center justify-center gap-sm min-h-[140px] shadow-[inset_0_1px_1px_rgba(255,255,255,0.7)] transition-all duration-500 ease-spring peer-checked:bg-error peer-checked:shadow-ambient">
+            <span className="material-symbols-outlined text-3xl text-on-surface-variant group-hover:text-on-surface peer-checked:text-on-error transition-colors">cancel</span>
+            <span className="text-label-md font-label-md text-on-surface-variant group-hover:text-on-surface peer-checked:text-on-error peer-checked:font-bold transition-all">No</span>
+          </div>
         </div>
       </label>
     </div>
@@ -206,8 +209,8 @@ export default function Questionnaire({ onSubmit, loading }) {
   const skipNote = getSkipNote();
 
   return (
-    <div className="flex-grow flex items-center justify-center py-xl w-full">
-      <div className="w-full max-w-[672px] bg-surface-container-lowest border border-outline-variant rounded shadow-sm p-lg md:p-xl flex flex-col gap-xl relative overflow-hidden">
+    <div className="flex-grow flex items-center justify-center py-24 md:py-32 w-full">
+      <div className="w-full max-w-[720px] bg-surface-container-lowest border border-outline-variant rounded-[2rem] shadow-ambient p-8 md:p-12 flex flex-col gap-xl relative overflow-hidden animate-fade-up">
         
         {/* Progress Indicator */}
         <div className="flex flex-col gap-sm">
@@ -232,7 +235,7 @@ export default function Questionnaire({ onSubmit, loading }) {
         )}
 
         {/* Dynamic Content */}
-        <div className="min-h-[320px] flex flex-col animate-fade-in">
+        <div className="min-h-[320px] flex flex-col animate-fade-up">
           <div className="flex-grow" key={currentStep.id}>
             
             {/* CONTEXT */}
@@ -638,14 +641,14 @@ export default function Questionnaire({ onSubmit, loading }) {
           </div>
           
           {/* Navigation Actions */}
-          <div className="flex justify-between items-center mt-md pt-lg border-t border-outline-variant">
+          <div className="flex justify-between items-center mt-xl pt-lg border-t border-outline-variant">
             {stepIdx > 0 ? (
               <button 
                 type="button" 
                 onClick={handleBack} 
-                className="inline-flex items-center justify-center gap-2 px-4 py-2 text-on-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md group cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2 text-on-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md group cursor-pointer ease-spring"
               >
-                <span className="material-symbols-outlined text-xl group-hover:-translate-x-1 transition-transform">arrow_back</span>
+                <span className="material-symbols-outlined text-xl group-hover:-translate-x-1 transition-transform ease-spring">arrow_back</span>
                 Back
               </button>
             ) : <div></div>}
@@ -655,27 +658,31 @@ export default function Questionnaire({ onSubmit, loading }) {
                 type="button" 
                 onClick={handleNext} 
                 disabled={!canProceed()}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-on-primary rounded font-label-md text-label-md hover:bg-primary-container transition-colors shadow-sm group disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                className="group bg-primary text-on-primary pl-8 pr-2 py-2.5 rounded-full font-bold text-base hover:bg-primary/90 transition-all shadow-ambient cursor-pointer flex items-center gap-4 active:scale-[0.98] ease-spring duration-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Next
-                <span className="material-symbols-outlined text-xl group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                Next Step
+                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center transition-transform duration-500 ease-spring group-hover:translate-x-1 group-hover:-translate-y-[1px] group-hover:scale-105">
+                  <span className="material-symbols-outlined text-base transition-transform ease-spring" style={{fontVariationSettings: "'wght' 600" }}>arrow_forward</span>
+                </div>
               </button>
             ) : (
               <button 
                 type="button"
                 onClick={handleSubmit}
                 disabled={loading || !canProceed()}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-on-primary rounded font-label-md text-label-md hover:bg-primary-container transition-colors shadow-sm group disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                className="group bg-primary text-on-primary pl-8 pr-2 py-2.5 rounded-full font-bold text-base hover:bg-primary/90 transition-all shadow-ambient cursor-pointer flex items-center gap-4 active:scale-[0.98] ease-spring duration-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
-                  <span className="flex items-center gap-2">
-                    <span className="material-symbols-outlined animate-spin text-xl">sync</span>
+                  <span className="flex items-center gap-2 pr-6">
+                    <span className="material-symbols-outlined animate-spin-slow text-xl">sync</span>
                     Analyzing...
                   </span>
                 ) : (
                   <>
                     Complete
-                    <span className="material-symbols-outlined text-xl group-hover:translate-x-1 transition-transform">check</span>
+                    <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center transition-transform duration-500 ease-spring group-hover:scale-105">
+                      <span className="material-symbols-outlined text-base transition-transform ease-spring" style={{fontVariationSettings: "'wght' 600" }}>check</span>
+                    </div>
                   </>
                 )}
               </button>

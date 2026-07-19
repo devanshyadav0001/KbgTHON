@@ -16201,16 +16201,27 @@
                 children: [
                   (0, o.jsx)("a", {
                     href: "#lab-report",
+                    onClick: (e) => {
+                      e.preventDefault();
+                      const el = document.getElementById("lab-report");
+                      if (el) el.scrollIntoView({ behavior: "smooth" });
+                    },
                     className: "hidden hover:text-rx-ink sm:inline",
                     children: "The data",
                   }),
                   (0, o.jsx)("a", {
                     href: "#how-it-works",
+                    onClick: (e) => {
+                      e.preventDefault();
+                      const el = document.getElementById("how-it-works");
+                      if (el) el.scrollIntoView({ behavior: "smooth" });
+                    },
                     className: "hidden hover:text-rx-ink sm:inline",
                     children: "How it works",
                   }),
                   (0, o.jsx)("a", {
-                    href: "#check",
+                    href: "/assessment",
+                    target: "_parent",
                     className:
                       "rounded-sm bg-rx-green px-3 py-1.5 font-medium text-white transition hover:bg-rx-greenDeep",
                     children: "Check your risk",
@@ -16435,7 +16446,12 @@
                         children: "Start your risk check",
                       }),
                       (0, o.jsx)("a", {
-                        href: "#lab-report",
+                        href: "#how-it-works",
+                        onClick: (e) => {
+                          e.preventDefault();
+                          const el = document.getElementById("how-it-works");
+                          if (el) el.scrollIntoView({ behavior: "smooth" });
+                        },
                         className:
                           "text-sm font-medium text-rx-ink/70 underline decoration-rx-rule underline-offset-4 hover:text-rx-ink",
                         children: "See how it works",

@@ -5,8 +5,7 @@ const STEPS = [
   "Checking misuse patterns with WHO/ICMR/CDC…",
   "Generating clinical summary…"
 ];
-
-const TOTAL_SECONDS = 12; // estimated total processing time
+const TOTAL_SECONDS = 30; // estimated total processing time
 
 export default function AnalysisProgress() {
   const [step, setStep] = useState(0);
@@ -16,7 +15,7 @@ export default function AnalysisProgress() {
     if (step < STEPS.length - 1) {
       const timer = setTimeout(() => {
         setStep(s => s + 1);
-      }, 1500); // 1.5 seconds per step
+      }, 8000); // 8 seconds per step
       return () => clearTimeout(timer);
     }
   }, [step]);
